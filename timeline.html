@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>日本史 詳細年表</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --bg:#070a10;
+  --panel:#0d1320;
+  --panel2:#111a2a;
+  --line:#24324a;
+  --text:#eef3ff;
+  --muted:#8e9ab0;
+  --accent:#6d8cff;
+  --gold:#e7bd62;
+  --danger:#ff6b7a;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(75,100,180,.16),transparent 35%),
+    radial-gradient(circle at 90% 10%,rgba(210,160,60,.08),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:
+    "Noto Sans JP",
+    "Yu Gothic",
+    system-ui,
+    sans-serif;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  backdrop-filter:blur(18px);
+  background:rgba(7,10,16,.82);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.header-inner{
+  max-width:1400px;
+  margin:auto;
+  padding:18px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+
+.logo span{
+  color:var(--gold);
+}
+
+.back{
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:#cbd5e8;
+  padding:9px 15px;
+  border-radius:10px;
+}
+
+.back:hover{
+  border-color:var(--accent);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  max-width:1400px;
+  margin:auto;
+  padding:55px 24px 25px;
+}
+
+.eyebrow{
+  color:var(--gold);
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.14em;
+  margin-bottom:12px;
+}
+
+h1{
+  margin:0;
+  font-size:clamp(34px,5vw,58px);
+  line-height:1.1;
+}
+
+.hero p{
+  color:var(--muted);
+  line-height:1.8;
+  max-width:800px;
+  margin:18px 0 0;
+}
+
+/* =========================
+   CONTROL
+========================= */
+
+.controls{
+  max-width:1400px;
+  margin:0 auto 30px;
+  padding:0 24px;
+}
+
+.control-box{
+  background:linear-gradient(
+    145deg,
+    rgba(17,26,42,.96),
+    rgba(9,14,24,.96)
+  );
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 20px 60px rgba(0,0,0,.22);
+}
+
+.search{
+  width:100%;
+  padding:15px 17px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  outline:none;
+  background:#080d17;
+  color:white;
+}
+
+.search:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(109,140,255,.12);
+}
+
+.filters{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-top:12px;
+}
+
+select{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#080d17;
+  color:#dce5f8;
+  outline:none;
+}
+
+.stats{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:14px;
+}
+
+.stat{
+  padding:8px 12px;
+  border-radius:999px;
+  background:#101827;
+  border:1px solid #1d2a40;
+  color:#aeb9cd;
+  font-size:13px;
+}
+
+.stat strong{
+  color:white;
+}
+
+/* =========================
+   TIMELINE
+========================= */
+
+main{
+  max-width:1400px;
+  margin:auto;
+  padding:0 24px 80px;
+}
+
+.timeline{
+  position:relative;
+}
+
+.timeline::before{
+  content:"";
+  position:absolute;
+  left:88px;
+  top:0;
+  bottom:0;
+  width:2px;
+  background:linear-gradient(
+    to bottom,
+    transparent,
+    #34496c 5%,
+    #34496c 95%,
+    transparent
+  );
+}
+
+.event{
+  position:relative;
+  display:grid;
+  grid-template-columns:150px 1fr;
+  gap:25px;
+  margin-bottom:18px;
+}
+
+.year{
+  text-align:right;
+  padding-top:20px;
+  padding-right:25px;
+  color:var(--gold);
+  font-size:15px;
+  font-weight:800;
+}
+
+.dot{
+  position:absolute;
+  left:80px;
+  top:25px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:var(--bg);
+  border:3px solid var(--accent);
+  box-shadow:0 0 15px rgba(109,140,255,.45);
+  z-index:2;
+}
+
+.card{
+  background:
+    linear-gradient(
+      145deg,
+      rgba(16,24,40,.96),
+      rgba(10,15,25,.96)
+    );
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:19px;
+  transition:.2s;
+}
+
+.card:hover{
+  transform:translateY(-2px);
+  border-color:#425b86;
+  box-shadow:0 15px 40px rgba(0,0,0,.22);
+}
+
+.card-top{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  align-items:center;
+}
+
+.badge{
+  display:inline-flex;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:11px;
+  background:#172238;
+  color:#aebde0;
+  border:1px solid #263754;
+}
+
+.badge.gold{
+  color:#f0ce7e;
+  border-color:#5e4c27;
+  background:#211b0f;
+}
+
+.title{
+  font-size:20px;
+  font-weight:800;
+  margin:10px 0 8px;
+}
+
+.summary{
+  color:#b3bfd2;
+  line-height:1.75;
+  font-size:14px;
+}
+
+.card-bottom{
+  margin-top:15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.tag{
+  color:#8190aa;
+  font-size:11px;
+}
+
+.detail-btn{
+  flex-shrink:0;
+  border:1px solid #314361;
+  background:#111c2e;
+  color:#dce6fb;
+  padding:8px 12px;
+  border-radius:9px;
+}
+
+.detail-btn:hover{
+  border-color:var(--accent);
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+  display:none;
+  text-align:center;
+  padding:70px 20px;
+  color:var(--muted);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  display:none;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+  padding:30px 15px;
+  overflow:auto;
+}
+
+.modal.open{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+.modal-box{
+  width:min(900px,100%);
+  margin:auto;
+  background:#0b111d;
+  border:1px solid #2a3b58;
+  border-radius:20px;
+  box-shadow:0 30px 100px rgba(0,0,0,.6);
+  overflow:hidden;
+}
+
+.modal-head{
+  padding:22px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.modal-head h2{
+  margin:0;
+  font-size:25px;
+}
+
+.close{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#111a2a;
+  color:white;
+  font-size:20px;
+}
+
+.modal-body{
+  padding:25px;
+}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  margin-bottom:25px;
+}
+
+.detail-box{
+  background:#0f1726;
+  border:1px solid #1d2a40;
+  border-radius:12px;
+  padding:13px;
+}
+
+.detail-label{
+  color:#74829b;
+  font-size:11px;
+  margin-bottom:5px;
+}
+
+.detail-value{
+  color:#edf2ff;
+  line-height:1.6;
+}
+
+.section{
+  margin-top:25px;
+}
+
+.section h3{
+  margin:0 0 10px;
+  font-size:17px;
+  color:#dfe8fa;
+}
+
+.section-content{
+  color:#b6c1d4;
+  line-height:1.8;
+  white-space:pre-wrap;
+}
+
+.list{
+  margin:0;
+  padding-left:20px;
+  color:#b6c1d4;
+  line-height:1.8;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:850px){
+
+  .filters{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .timeline::before{
+    left:13px;
+  }
+
+  .event{
+    display:block;
+    padding-left:40px;
+  }
+
+  .year{
+    text-align:left;
+    padding:0 0 8px;
+  }
+
+  .dot{
+    left:4px;
+    top:4px;
+  }
+}
+
+@media(max-width:560px){
+
+  .hero{
+    padding-top:35px;
+  }
+
+  .filters{
+    grid-template-columns:1fr;
+  }
+
+  main,
+  .controls,
+  .hero{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .card-bottom{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .detail-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+
+    <div class="logo">
+      日本史<span>｜詳細年表</span>
+    </div>
+
+    <a class="back" href="index.html">
+      ← トップへ
+    </a>
+
+  </div>
+</header>
+
+<section class="hero">
+
+  <div class="eyebrow">
+    JAPANESE HISTORY DATABASE
+  </div>
+
+  <h1>日本史 詳細年表</h1>
+
+  <p>
+    原始から現代までの政治・社会・経済・外交・文化・宗教を、
+    年代順に整理。出来事の「前後関係」と「なぜ起きたのか」まで
+    つなげて理解するための日本史データベース。
+  </p>
+
+</section>
+
+<section class="controls">
+
+  <div class="control-box">
+
+    <input
+      id="search"
+      class="search"
+      type="text"
+      placeholder="事件・人物・制度・年・文化などを検索..."
+    >
+
+    <div class="filters">
+
+      <select id="eraFilter">
+        <option value="">すべての時代</option>
+      </select>
+
+      <select id="categoryFilter">
+        <option value="">すべての分野</option>
+      </select>
+
+      <select id="importanceFilter">
+        <option value="">すべての重要度</option>
+        <option value="5">最重要</option>
+        <option value="4">重要</option>
+        <option value="3">標準</option>
+        <option value="2">発展</option>
+        <option value="1">補足</option>
+      </select>
+
+      <select id="orderFilter">
+        <option value="asc">古い → 新しい</option>
+        <option value="desc">新しい → 古い</option>
+      </select>
+
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        表示 <strong id="visibleCount">0</strong> 件
+      </div>
+
+      <div class="stat">
+        全体 <strong id="totalCount">0</strong> 件
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<main>
+
+  <div id="timeline" class="timeline"></div>
+
+  <div id="empty" class="empty">
+    条件に一致する出来事がありません。
+  </div>
+
+</main>
+
+<div id="modal" class="modal">
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h2 id="modalTitle"></h2>
+
+      <button
+        id="closeModal"
+        class="close"
+        type="button"
+      >×</button>
+
+    </div>
+
+    <div id="modalBody" class="modal-body"></div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* =========================================================
+   日本史 年表データ
+
+   schema
+
+   id
+   year
+   yearLabel
+   era
+   category
+   importance
+   title
+   summary
+   cause
+   body
+   result
+   significance
+   people
+   institutions
+   related
+   tags
+========================================================= */
+
+const EVENTS = [
+
+  {
+    id:"prehistoric_001",
+    year:-35000,
+    yearLabel:"約3万5000年前",
+    era:"旧石器",
+    category:"社会",
+    importance:3,
+    title:"日本列島で旧石器文化が発達",
+    summary:"日本列島では打製石器を使う人々の活動が確認されている。",
+    cause:"人類が東アジア各地から日本列島へ移動したこと。",
+    body:"旧石器時代には狩猟・採集を中心とする生活が営まれた。",
+    result:"日本列島独自の旧石器文化が形成された。",
+    significance:"日本列島における人類史の出発点を理解するうえで重要。",
+    people:[],
+    institutions:[],
+    related:[],
+    tags:["旧石器","打製石器","狩猟","採集"]
+  },
+
+  {
+    id:"prehistoric_002",
+    year:-14000,
+    yearLabel:"約1万4000年前",
+    era:"縄文",
+    category:"文化",
+    importance:5,
+    title:"縄文文化が成立",
+    summary:"土器を使用し、定住性の高い生活を営む縄文文化が発達した。",
+    cause:"気候の温暖化や環境の変化によって生活形態が変化した。",
+    body:"縄文土器、竪穴住居、貝塚などが特徴。",
+    result:"狩猟・採集・漁労を基盤とする定住生活が発達した。",
+    significance:"日本列島の先史社会を理解する基本事項。",
+    people:[],
+    institutions:[],
+    related:["弥生文化"],
+    tags:["縄文土器","貝塚","竪穴住居","定住"]
+  },
+
+  {
+    id:"prehistoric_003",
+    year:-900,
+    yearLabel:"紀元前9世紀頃",
+    era:"弥生",
+    category:"経済",
+    importance:5,
+    title:"水稲農耕が日本列島に広がる",
+    summary:"大陸・朝鮮半島との交流を背景に、水稲農耕が各地へ広がった。",
+    cause:"大陸・朝鮮半島との交流や渡来人の移動。",
+    body:"水田稲作、金属器、環濠集落などが発達した。",
+    result:"生産力が高まり、社会の階層化や地域勢力の形成が進んだ。",
+    significance:"古代国家形成につながる社会変化の重要な出発点。",
+    people:[],
+    institutions:["環濠集落"],
+    related:["邪馬台国","古墳文化"],
+    tags:["水稲農耕","弥生土器","青銅器","鉄器"]
+  },
+
+  {
+    id:"ancient_001",
+    year:57,
+    yearLabel:"57年",
+    era:"弥生",
+    category:"外交",
+    importance:5,
+    title:"奴国王が後漢に使者を送る",
+    summary:"倭の奴国王が後漢に朝貢し、金印を授けられた。",
+    cause:"倭の諸勢力が大陸との外交関係を築いたため。",
+    body:"『後漢書』東夷伝に記録される。",
+    result:"倭と中国王朝との外交関係が確認できる。",
+    significance:"古代日本と中国との関係を示す代表的史料。",
+    people:["奴国王"],
+    institutions:[],
+    related:["邪馬台国"],
+    tags:["漢","金印","倭","奴国"]
+  },
+
+  {
+    id:"ancient_002",
+    year:239,
+    yearLabel:"239年",
+    era:"古墳",
+    category:"外交",
+    importance:5,
+    title:"卑弥呼が魏に使者を送る",
+    summary:"邪馬台国の女王卑弥呼が魏に使者を派遣した。",
+    cause:"東アジアの国際関係の中で倭国の地位を確立しようとした。",
+    body:"魏から「親魏倭王」の称号と銅鏡などを受けたとされる。",
+    result:"邪馬台国と魏との外交関係が成立した。",
+    significance:"古代日本と中国王朝との関係を理解する重要史料。",
+    people:["卑弥呼"],
+    institutions:[],
+    related:["奴国","古墳文化"],
+    tags:["邪馬台国","魏","親魏倭王","卑弥呼"]
+  },
+
+  {
+    id:"ancient_003",
+    year:538,
+    yearLabel:"6世紀前半",
+    era:"飛鳥",
+    category:"宗教",
+    importance:5,
+    title:"仏教が公伝する",
+    summary:"百済から日本へ仏教が伝えられたとされる。",
+    cause:"朝鮮半島諸国との外交・文化交流。",
+    body:"仏教の受容をめぐって豪族間で対立も生じた。",
+    result:"日本の政治・文化・思想に仏教が大きな影響を与えるようになった。",
+    significance:"古代日本文化の形成を理解する重要事項。",
+    people:["蘇我氏","物部氏"],
+    institutions:[],
+    related:["飛鳥文化","法隆寺"],
+    tags:["仏教","百済","蘇我氏","物部氏"]
+  },
+
+  {
+    id:"ancient_004",
+    year:593,
+    yearLabel:"593年",
+    era:"飛鳥",
+    category:"政治",
+    importance:5,
+    title:"聖徳太子が推古天皇の政治を補佐",
+    summary:"推古天皇のもとで厩戸王が政治を主導した。",
+    cause:"豪族間の対立を調整し、中央集権的な政治を進める必要があった。",
+    body:"冠位十二階や十七条憲法、遣隋使などと関連づけて理解する。",
+    result:"中央集権化に向けた政治改革が進んだ。",
+    significance:"律令国家形成以前の政治改革を理解する重要人物。",
+    people:["聖徳太子","推古天皇"],
+    institutions:["冠位十二階"],
+    related:["十七条憲法","遣隋使"],
+    tags:["聖徳太子","推古天皇","飛鳥","政治改革"]
+  },
+
+  {
+    id:"ancient_005",
+    year:645,
+    yearLabel:"645年",
+    era:"飛鳥",
+    category:"政治",
+    importance:5,
+    title:"乙巳の変",
+    summary:"中大兄皇子と中臣鎌足らが蘇我入鹿を倒した。",
+    cause:"蘇我氏の権力集中に対する反発。",
+    body:"蘇我入鹿が暗殺され、蘇我本宗家が滅亡した。",
+    result:"改新政治へつながる大きな政治変動となった。",
+    significance:"大化改新の出発点として重要。",
+    people:["中大兄皇子","中臣鎌足","蘇我入鹿"],
+    institutions:[],
+    related:["大化改新"],
+    tags:["乙巳の変","蘇我氏","中大兄皇子"]
+  },
+
+  {
+    id:"ancient_006",
+    year:646,
+    yearLabel:"646年",
+    era:"飛鳥",
+    category:"政治",
+    importance:5,
+    title:"改新の詔",
+    summary:"公地公民を掲げ、中央集権的国家を目指す改革方針が示された。",
+    cause:"豪族中心の政治から中央集権国家へ転換する必要があった。",
+    body:"土地・人民の国家的把握などを掲げた。",
+    result:"律令国家形成への道が開かれた。",
+    significance:"大化改新の理念を理解する重要事項。",
+    people:["中大兄皇子","中臣鎌足"],
+    institutions:["公地公民"],
+    related:["大宝律令","班田収授法"],
+    tags:["大化改新","公地公民","中央集権"]
+  },
+
+  {
+    id:"ancient_007",
+    year:701,
+    yearLabel:"701年",
+    era:"飛鳥",
+    category:"政治",
+    importance:5,
+    title:"大宝律令",
+    summary:"律令国家の基本法典として大宝律令が制定された。",
+    cause:"中央集権的な律令国家の制度を整備するため。",
+    body:"律令に基づく官僚制や地方支配の仕組みが整えられた。",
+    result:"律令国家の政治制度が本格的に整備された。",
+    significance:"日本の古代国家制度を理解する核心事項。",
+    people:["文武天皇","藤原不比等"],
+    institutions:["二官八省","国郡里制"],
+    related:["養老律令","班田収授法"],
+    tags:["大宝律令","律令国家","文武天皇"]
+  },
+
+  {
+    id:"ancient_008",
+    year:710,
+    yearLabel:"710年",
+    era:"奈良",
+    category:"政治",
+    importance:5,
+    title:"平城京に遷都",
+    summary:"都が藤原京から平城京へ移された。",
+    cause:"律令国家の中央政治を安定させるため。",
+    body:"唐の長安をモデルとした都城が整備された。",
+    result:"奈良時代の政治・文化の中心となった。",
+    significance:"奈良時代の開始を理解する基準。",
+    people:["元明天皇"],
+    institutions:[],
+    related:["天平文化","東大寺"],
+    tags:["平城京","奈良時代","元明天皇"]
+  },
+
+  {
+    id:"ancient_009",
+    year:743,
+    yearLabel:"743年",
+    era:"奈良",
+    category:"経済",
+    importance:5,
+    title:"墾田永年私財法",
+    summary:"新たに開墾した土地の永久私有を認めた。",
+    cause:"班田収授法による土地支配が行き詰まり、開墾を促進する必要があった。",
+    body:"開墾地の私有を認め、後の荘園発達につながった。",
+    result:"土地私有の拡大が進んだ。",
+    significance:"律令制の変質と荘園制の成立を理解する重要事項。",
+    people:["聖武天皇"],
+    institutions:["班田収授法"],
+    related:["荘園","三世一身法"],
+    tags:["墾田永年私財法","荘園","土地制度"]
+  },
+
+  {
+    id:"medieval_001",
+    year:1185,
+    yearLabel:"1185年",
+    era:"鎌倉",
+    category:"政治",
+    importance:5,
+    title:"源頼朝が守護・地頭を設置",
+    summary:"源頼朝が全国に守護・地頭を置く権利を得た。",
+    cause:"平氏滅亡後の全国支配を強化する必要があった。",
+    body:"朝廷から軍事・警察権などを認められ、鎌倉幕府の支配が拡大した。",
+    result:"武家政権の全国的基盤が形成された。",
+    significance:"鎌倉幕府成立過程を理解する最重要事項。",
+    people:["源頼朝"],
+    institutions:["守護","地頭"],
+    related:["鎌倉幕府","御家人"],
+    tags:["源頼朝","守護","地頭","鎌倉幕府"]
+  },
+
+  {
+    id:"medieval_002",
+    year:1221,
+    yearLabel:"1221年",
+    era:"鎌倉",
+    category:"政治",
+    importance:5,
+    title:"承久の乱",
+    summary:"後鳥羽上皇が鎌倉幕府打倒を試みたが敗北した。",
+    cause:"朝廷と幕府の権力関係をめぐる対立。",
+    body:"幕府軍が勝利し、後鳥羽上皇らが配流された。",
+    result:"幕府の朝廷に対する優位が決定的になった。",
+    significance:"中世国家の政治構造を理解する重要事件。",
+    people:["後鳥羽上皇","北条義時"],
+    institutions:["六波羅探題"],
+    related:["北条氏","鎌倉幕府"],
+    tags:["承久の乱","後鳥羽上皇","北条義時"]
+  },
+
+  {
+    id:"medieval_003",
+    year:1274,
+    yearLabel:"1274年",
+    era:"鎌倉",
+    category:"外交",
+    importance:5,
+    title:"文永の役",
+    summary:"元軍が九州北部へ侵攻した。",
+    cause:"元のフビライが日本に服属を求めたが、日本側が応じなかったため。",
+    body:"元軍は集団戦法や火器を使用した。",
+    result:"幕府は異国警固を強化した。",
+    significance:"モンゴル襲来と鎌倉幕府の衰退を理解する重要事項。",
+    people:["フビライ","北条時宗"],
+    institutions:["異国警固番役"],
+    related:["弘安の役"],
+    tags:["元寇","文永の役","フビライ"]
+  },
+
+  {
+    id:"medieval_004",
+    year:1333,
+    yearLabel:"1333年",
+    era:"鎌倉",
+    category:"政治",
+    importance:5,
+    title:"鎌倉幕府滅亡",
+    summary:"新田義貞らの攻撃によって鎌倉幕府が滅亡した。",
+    cause:"幕府の政治的・経済的基盤が弱まり、反幕府勢力が拡大した。",
+    body:"後醍醐天皇による討幕運動が進められた。",
+    result:"建武政権へ移行した。",
+    significance:"鎌倉時代から南北朝期への転換点。",
+    people:["後醍醐天皇","新田義貞","足利尊氏"],
+    institutions:[],
+    related:["建武の新政","南北朝時代"],
+    tags:["鎌倉幕府滅亡","後醍醐天皇","新田義貞"]
+  },
+
+  {
+    id:"medieval_005",
+    year:1467,
+    yearLabel:"1467年",
+    era:"室町",
+    category:"政治",
+    importance:5,
+    title:"応仁の乱",
+    summary:"将軍家や守護大名の対立を背景に京都で大規模な内乱が発生した。",
+    cause:"将軍継嗣問題と守護大名間の対立。",
+    body:"細川勝元と山名宗全を中心に争われた。",
+    result:"室町幕府の権威が低下し、戦国時代へつながった。",
+    significance:"戦国時代成立の重要な転換点。",
+    people:["足利義政","細川勝元","山名宗全"],
+    institutions:["室町幕府"],
+    related:["戦国大名"],
+    tags:["応仁の乱","室町幕府","戦国時代"]
+  },
+
+  {
+    id:"earlymodern_001",
+    year:1600,
+    yearLabel:"1600年",
+    era:"安土桃山",
+    category:"政治",
+    importance:5,
+    title:"関ヶ原の戦い",
+    summary:"徳川家康率いる東軍が石田三成らの西軍を破った。",
+    cause:"豊臣政権内部の主導権争い。",
+    body:"徳川家康の勢力が全国的な主導権を握る契機となった。",
+    result:"徳川家康による支配体制形成が進んだ。",
+    significance:"江戸幕府成立への重要な転換点。",
+    people:["徳川家康","石田三成"],
+    institutions:[],
+    related:["江戸幕府","大坂の陣"],
+    tags:["関ヶ原","徳川家康","石田三成"]
+  },
+
+  {
+    id:"earlymodern_002",
+    year:1603,
+    yearLabel:"1603年",
+    era:"江戸",
+    category:"政治",
+    importance:5,
+    title:"徳川家康が征夷大将軍に任命される",
+    summary:"徳川家康が征夷大将軍となり、江戸幕府を開いた。",
+    cause:"関ヶ原の戦いで全国的主導権を握ったため。",
+    body:"江戸を政治の中心として幕府体制を整備した。",
+    result:"約260年間続く江戸時代が始まった。",
+    significance:"近世日本の政治体制の出発点。",
+    people:["徳川家康"],
+    institutions:["江戸幕府"],
+    related:["武家諸法度","参勤交代"],
+    tags:["徳川家康","江戸幕府","征夷大将軍"]
+  },
+
+  {
+    id:"earlymodern_003",
+    year:1635,
+    yearLabel:"1635年",
+    era:"江戸",
+    category:"政治",
+    importance:5,
+    title:"参勤交代が制度化",
+    summary:"大名に江戸と領国を往復させる制度が整えられた。",
+    cause:"大名統制を強化するため。",
+    body:"大名は一定期間江戸に滞在することを義務づけられた。",
+    result:"幕府による大名統制が強化された。",
+    significance:"幕藩体制を理解する重要制度。",
+    people:["徳川家光"],
+    institutions:["参勤交代"],
+    related:["武家諸法度","幕藩体制"],
+    tags:["参勤交代","徳川家光","大名統制"]
+  },
+
+  {
+    id:"earlymodern_004",
+    year:1716,
+    yearLabel:"1716年頃",
+    era:"江戸",
+    category:"政治",
+    importance:4,
+    title:"享保の改革",
+    summary:"徳川吉宗が財政再建と政治改革を進めた。",
+    cause:"幕府財政の悪化。",
+    body:"上米の制、公事方御定書、目安箱などの政策を実施した。",
+    result:"幕府財政の立て直しが図られた。",
+    significance:"江戸三大改革の一つ。",
+    people:["徳川吉宗"],
+    institutions:["目安箱","公事方御定書"],
+    related:["寛政の改革","天保の改革"],
+    tags:["享保の改革","徳川吉宗"]
+  },
+
+  {
+    id:"modern_001",
+    year:1853,
+    yearLabel:"1853年",
+    era:"幕末",
+    category:"外交",
+    importance:5,
+    title:"ペリー来航",
+    summary:"アメリカ東インド艦隊を率いるペリーが浦賀に来航した。",
+    cause:"アメリカが日本との通商・補給関係を求めたため。",
+    body:"黒船来航によって幕府は外交対応を迫られた。",
+    result:"日米和親条約締結へつながった。",
+    significance:"幕末の政治変動を理解する出発点。",
+    people:["ペリー","徳川家慶","徳川家定"],
+    institutions:[],
+    related:["日米和親条約","日米修好通商条約"],
+    tags:["ペリー","黒船","幕末"]
+  },
+
+  {
+    id:"modern_002",
+    year:1854,
+    yearLabel:"1854年",
+    era:"幕末",
+    category:"外交",
+    importance:5,
+    title:"日米和親条約",
+    summary:"日本とアメリカの間で和親条約が結ばれた。",
+    cause:"ペリー来航を受けて幕府が外交政策を転換したため。",
+    body:"下田・箱館を開港し、アメリカ船への薪水・食料供給などを認めた。",
+    result:"日本の開国が進んだ。",
+    significance:"幕末の開国過程を理解する重要条約。",
+    people:["ペリー"],
+    institutions:[],
+    related:["日米修好通商条約"],
+    tags:["日米和親条約","開国"]
+  },
+
+  {
+    id:"modern_003",
+    year:1868,
+    yearLabel:"1868年",
+    era:"明治",
+    category:"政治",
+    importance:5,
+    title:"明治維新",
+    summary:"幕府中心の政治から天皇を中心とする新政府へ政治体制が転換した。",
+    cause:"幕府の弱体化、開国による社会不安、討幕運動など。",
+    body:"王政復古、五箇条の御誓文、戊辰戦争などを経て新政府が成立した。",
+    result:"近代国家形成に向けた改革が進んだ。",
+    significance:"近代日本成立の最大の転換点の一つ。",
+    people:["明治天皇","西郷隆盛","大久保利通","木戸孝允"],
+    institutions:["新政府"],
+    related:["廃藩置県","徴兵令","地租改正"],
+    tags:["明治維新","王政復古","戊辰戦争"]
+  },
+
+  {
+    id:"modern_004",
+    year:1871,
+    yearLabel:"1871年",
+    era:"明治",
+    category:"政治",
+    importance:5,
+    title:"廃藩置県",
+    summary:"藩を廃止して府県を置き、中央政府による地方支配を確立した。",
+    cause:"中央集権的な国家を形成するため。",
+    body:"旧藩主を知藩事から退け、府県を政府が直接統治した。",
+    result:"中央集権化が大きく進んだ。",
+    significance:"明治国家の統治機構を理解する重要改革。",
+    people:["大久保利通","木戸孝允"],
+    institutions:["府県制"],
+    related:["版籍奉還","地租改正"],
+    tags:["廃藩置県","中央集権"]
+  },
+
+  {
+    id:"modern_005",
+    year:1889,
+    yearLabel:"1889年",
+    era:"明治",
+    category:"政治",
+    importance:5,
+    title:"大日本帝国憲法発布",
+    summary:"日本で近代憲法が制定された。",
+    cause:"近代国家としての政治制度を整備する必要があったため。",
+    body:"天皇主権を基本とし、帝国議会の設置などを定めた。",
+    result:"1890年に帝国議会が開設された。",
+    significance:"明治国家の政治体制を理解する核心事項。",
+    people:["明治天皇","伊藤博文"],
+    institutions:["帝国議会"],
+    related:["国会開設","日本国憲法"],
+    tags:["大日本帝国憲法","伊藤博文","帝国議会"]
+  },
+
+  {
+    id:"modern_006",
+    year:1945,
+    yearLabel:"1945年",
+    era:"昭和",
+    category:"政治",
+    importance:5,
+    title:"第二次世界大戦終結",
+    summary:"日本がポツダム宣言を受諾し、第二次世界大戦が終結した。",
+    cause:"戦争の長期化と連合国による攻勢。",
+    body:"8月15日に国民へ終戦が伝えられた。",
+    result:"連合国軍による占領と戦後改革が始まった。",
+    significance:"現代日本の出発点となる重要な転換点。",
+    people:["昭和天皇","鈴木貫太郎"],
+    institutions:["GHQ"],
+    related:["日本国憲法","農地改革","財閥解体"],
+    tags:["第二次世界大戦","終戦","ポツダム宣言"]
+  },
+
+  {
+    id:"modern_007",
+    year:1946,
+    yearLabel:"1946年",
+    era:"昭和",
+    category:"政治",
+    importance:5,
+    title:"日本国憲法公布",
+    summary:"日本国憲法が公布された。",
+    cause:"戦後の政治・社会改革。",
+    body:"基本的人権の尊重、国民主権、平和主義を基本原理とした。",
+    result:"1947年に施行された。",
+    significance:"戦後日本の政治体制を理解する最重要事項。",
+    people:["幣原喜重郎"],
+    institutions:["日本国憲法"],
+    related:["日本国憲法施行"],
+    tags:["日本国憲法","国民主権","基本的人権","平和主義"]
+  }
+
+];
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentEvents = [...EVENTS];
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const timeline = document.getElementById("timeline");
+const empty = document.getElementById("empty");
+
+const search = document.getElementById("search");
+const eraFilter = document.getElementById("eraFilter");
+const categoryFilter = document.getElementById("categoryFilter");
+const importanceFilter = document.getElementById("importanceFilter");
+const orderFilter = document.getElementById("orderFilter");
+
+const visibleCount = document.getElementById("visibleCount");
+const totalCount = document.getElementById("totalCount");
+
+const modal = document.getElementById("modal");
+const modalTitle = document.getElementById("modalTitle");
+const modalBody = document.getElementById("modalBody");
+const closeModal = document.getElementById("closeModal");
+
+
+/* =========================================================
+   INIT FILTERS
+========================================================= */
+
+function initFilters(){
+
+  const eras = [...new Set(
+    EVENTS.map(e => e.era)
+  )];
+
+  const categories = [...new Set(
+    EVENTS.map(e => e.category)
+  )];
+
+  eras.forEach(era => {
+
+    const option = document.createElement("option");
+
+    option.value = era;
+    option.textContent = era;
+
+    eraFilter.appendChild(option);
+
+  });
+
+  categories.forEach(category => {
+
+    const option = document.createElement("option");
+
+    option.value = category;
+    option.textContent = category;
+
+    categoryFilter.appendChild(option);
+
+  });
+
+  totalCount.textContent = EVENTS.length;
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+function searchableText(event){
+
+  return JSON.stringify(event)
+    .toLowerCase();
+
+}
+
+
+function applyFilters(){
+
+  const query = search.value
+    .trim()
+    .toLowerCase();
+
+  const era = eraFilter.value;
+  const category = categoryFilter.value;
+  const importance = importanceFilter.value;
+
+  currentEvents = EVENTS.filter(event => {
+
+    const matchesSearch =
+      !query ||
+      searchableText(event).includes(query);
+
+    const matchesEra =
+      !era ||
+      event.era === era;
+
+    const matchesCategory =
+      !category ||
+      event.category === category;
+
+    const matchesImportance =
+      !importance ||
+      String(event.importance) === importance;
+
+    return (
+      matchesSearch &&
+      matchesEra &&
+      matchesCategory &&
+      matchesImportance
+    );
+
+  });
+
+  sortEvents();
+
+  render();
+
+}
+
+
+/* =========================================================
+   SORT
+========================================================= */
+
+function sortEvents(){
+
+  const direction = orderFilter.value;
+
+  currentEvents.sort((a,b) => {
+
+    return direction === "asc"
+      ? a.year - b.year
+      : b.year - a.year;
+
+  });
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+  timeline.innerHTML = "";
+
+  visibleCount.textContent =
+    currentEvents.length;
+
+  empty.style.display =
+    currentEvents.length
+      ? "none"
+      : "block";
+
+  currentEvents.forEach(event => {
+
+    const article =
+      document.createElement("article");
+
+    article.className = "event";
+
+    const peopleText =
+      event.people?.length
+        ? event.people.join(" / ")
+        : "—";
+
+    article.innerHTML = `
+
+      <div class="year">
+        ${escapeHTML(event.yearLabel)}
+      </div>
+
+      <div class="dot"></div>
+
+      <div class="card">
+
+        <div class="card-top">
+
+          <span class="badge">
+            ${escapeHTML(event.era)}
+          </span>
+
+          <span class="badge">
+            ${escapeHTML(event.category)}
+          </span>
+
+          ${
+            event.importance >= 5
+              ? `<span class="badge gold">最重要</span>`
+              : ""
+          }
+
+        </div>
+
+        <div class="title">
+          ${escapeHTML(event.title)}
+        </div>
+
+        <div class="summary">
+          ${escapeHTML(event.summary)}
+        </div>
+
+        <div class="card-bottom">
+
+          <div class="tags">
+
+            <span class="tag">
+              関係人物：${escapeHTML(peopleText)}
+            </span>
+
+          </div>
+
+          <button
+            class="detail-btn"
+            type="button"
+            data-id="${escapeHTML(event.id)}"
+          >
+            詳細を見る
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+    timeline.appendChild(article);
+
+  });
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModal(id){
+
+  const event =
+    EVENTS.find(e => e.id === id);
+
+  if(!event) return;
+
+  modalTitle.textContent =
+    event.title;
+
+  modalBody.innerHTML = `
+
+    <div class="detail-grid">
+
+      <div class="detail-box">
+        <div class="detail-label">年代</div>
+        <div class="detail-value">
+          ${escapeHTML(event.yearLabel)}
+        </div>
+      </div>
+
+      <div class="detail-box">
+        <div class="detail-label">時代</div>
+        <div class="detail-value">
+          ${escapeHTML(event.era)}
+        </div>
+      </div>
+
+      <div class="detail-box">
+        <div class="detail-label">分野</div>
+        <div class="detail-value">
+          ${escapeHTML(event.category)}
+        </div>
+      </div>
+
+      <div class="detail-box">
+        <div class="detail-label">重要度</div>
+        <div class="detail-value">
+          ${"★".repeat(event.importance)}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <h3>概要</h3>
+
+      <div class="section-content">
+        ${escapeHTML(event.summary)}
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <h3>なぜ起きた？</h3>
+
+      <div class="section-content">
+        ${escapeHTML(event.cause)}
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <h3>何が起きた？</h3>
+
+      <div class="section-content">
+        ${escapeHTML(event.body)}
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <h3>その結果</h3>
+
+      <div class="section-content">
+        ${escapeHTML(event.result)}
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <h3>歴史的意義</h3>
+
+      <div class="section-content">
+        ${escapeHTML(event.significance)}
+      </div>
+
+    </div>
+
+    <div class="section">
+
+      <h3>関係人物</h3>
+
+      <ul class="list">
+
+        ${
+          event.people?.length
+            ? event.people.map(
+                p => `<li>${escapeHTML(p)}</li>`
+              ).join("")
+            : "<li>登録なし</li>"
+        }
+
+      </ul>
+
+    </div>
+
+    <div class="section">
+
+      <h3>関連制度・機関</h3>
+
+      <ul class="list">
+
+        ${
+          event.institutions?.length
+            ? event.institutions.map(
+                p => `<li>${escapeHTML(p)}</li>`
+              ).join("")
+            : "<li>登録なし</li>"
+        }
+
+      </ul>
+
+    </div>
+
+    <div class="section">
+
+      <h3>関連事項</h3>
+
+      <ul class="list">
+
+        ${
+          event.related?.length
+            ? event.related.map(
+                p => `<li>${escapeHTML(p)}</li>`
+              ).join("")
+            : "<li>登録なし</li>"
+        }
+
+      </ul>
+
+    </div>
+
+    <div class="section">
+
+      <h3>検索タグ</h3>
+
+      <div class="tags">
+
+        ${
+          event.tags?.map(
+            tag =>
+              `<span class="badge">${escapeHTML(tag)}</span>`
+          ).join(" ")
+          || "—"
+        }
+
+      </div>
+
+    </div>
+
+  `;
+
+  modal.classList.add("open");
+
+}
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+search.addEventListener(
+  "input",
+  applyFilters
+);
+
+eraFilter.addEventListener(
+  "change",
+  applyFilters
+);
+
+categoryFilter.addEventListener(
+  "change",
+  applyFilters
+);
+
+importanceFilter.addEventListener(
+  "change",
+  applyFilters
+);
+
+orderFilter.addEventListener(
+  "change",
+  applyFilters
+);
+
+
+timeline.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        ".detail-btn"
+      );
+
+    if(!button) return;
+
+    openModal(
+      button.dataset.id
+    );
+
+  }
+);
+
+
+closeModal.addEventListener(
+  "click",
+  () => {
+    modal.classList.remove("open");
+  }
+);
+
+
+modal.addEventListener(
+  "click",
+  event => {
+
+    if(event.target === modal){
+      modal.classList.remove("open");
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Escape"){
+      modal.classList.remove("open");
+    }
+
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+initFilters();
+sortEvents();
+render();
+
+</script>
+
+</body>
+</html>
