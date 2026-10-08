@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本史 CONNECTIONS</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --bg:#080b12;
+  --panel:#101621;
+  --panel2:#141c29;
+  --line:#263246;
+  --text:#e8eef7;
+  --sub:#91a0b7;
+  --blue:#5ca8ff;
+  --cyan:#52e0e0;
+  --purple:#a982ff;
+  --green:#62df9b;
+  --orange:#ffb45c;
+  --red:#ff6f7d;
+}
+
+body{
+  background:
+    radial-gradient(circle at 20% 0%,rgba(82,224,224,.08),transparent 30%),
+    radial-gradient(circle at 80% 10%,rgba(169,130,255,.08),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:
+    -apple-system,BlinkMacSystemFont,
+    "Noto Sans JP","Yu Gothic",sans-serif;
+  min-height:100vh;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter:blur(16px);
+  background:rgba(8,11,18,.88);
+  border-bottom:1px solid var(--line);
+}
+
+.header-inner{
+  max-width:1400px;
+  margin:auto;
+  padding:18px 24px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.logo{
+  font-weight:900;
+  letter-spacing:.08em;
+  color:var(--cyan);
+  font-size:20px;
+}
+
+.logo span{
+  color:#fff;
+}
+
+.nav{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.nav a{
+  color:var(--sub);
+  text-decoration:none;
+  padding:8px 12px;
+  border-radius:8px;
+  transition:.2s;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:var(--panel2);
+}
+
+.nav a.active{
+  color:var(--cyan);
+  background:rgba(82,224,224,.1);
+}
+
+.hero{
+  max-width:1400px;
+  margin:auto;
+  padding:55px 24px 30px;
+}
+
+.eyebrow{
+  color:var(--cyan);
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.16em;
+  margin-bottom:12px;
+}
+
+h1{
+  font-size:clamp(32px,5vw,58px);
+  line-height:1.1;
+  margin-bottom:16px;
+}
+
+.hero p{
+  color:var(--sub);
+  max-width:800px;
+  line-height:1.8;
+}
+
+.controls{
+  max-width:1400px;
+  margin:auto;
+  padding:0 24px 28px;
+}
+
+.search{
+  width:100%;
+  padding:16px 18px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  color:#fff;
+  outline:none;
+  margin-bottom:14px;
+}
+
+.search:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 3px rgba(82,224,224,.08);
+}
+
+.filters{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+select{
+  padding:13px 14px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  color:#fff;
+  border-radius:10px;
+  outline:none;
+}
+
+.stats{
+  max-width:1400px;
+  margin:auto;
+  padding:0 24px 25px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.stat{
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:12px 16px;
+  border-radius:10px;
+  color:var(--sub);
+}
+
+.stat strong{
+  color:#fff;
+  margin-right:5px;
+}
+
+.main{
+  max-width:1400px;
+  margin:auto;
+  padding:0 24px 70px;
+}
+
+/* CONNECTION */
+.connection-list{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.connection{
+  position:relative;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.025),transparent),
+    var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+  transition:.25s;
+}
+
+.connection:hover{
+  transform:translateY(-2px);
+  border-color:#3b4d68;
+  box-shadow:0 12px 35px rgba(0,0,0,.22);
+}
+
+.connection-main{
+  padding:24px;
+}
+
+.connection-top{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  align-items:flex-start;
+}
+
+.number{
+  color:var(--cyan);
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.1em;
+}
+
+.title{
+  font-size:23px;
+  font-weight:900;
+  margin-top:7px;
+}
+
+.description{
+  color:var(--sub);
+  line-height:1.8;
+  margin-top:12px;
+}
+
+.badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:15px;
+}
+
+.badge{
+  font-size:12px;
+  padding:5px 9px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--sub);
+  background:rgba(255,255,255,.025);
+}
+
+.badge.cause{
+  color:var(--orange);
+  border-color:rgba(255,180,92,.3);
+}
+
+.badge.result{
+  color:var(--green);
+  border-color:rgba(98,223,155,.3);
+}
+
+.badge.people{
+  color:var(--purple);
+  border-color:rgba(169,130,255,.3);
+}
+
+.badge.period{
+  color:var(--blue);
+  border-color:rgba(92,168,255,.3);
+}
+
+.flow{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:1fr 70px 1fr;
+  align-items:stretch;
+  gap:12px;
+}
+
+.node{
+  background:var(--panel2);
+  border:1px solid #2b374b;
+  border-radius:12px;
+  padding:17px;
+}
+
+.node-label{
+  color:var(--sub);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.1em;
+  margin-bottom:7px;
+}
+
+.node h3{
+  font-size:17px;
+  margin-bottom:7px;
+}
+
+.node p{
+  color:var(--sub);
+  font-size:13px;
+  line-height:1.7;
+}
+
+.arrow{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:var(--cyan);
+  font-size:28px;
+}
+
+.details{
+  border-top:1px solid var(--line);
+  padding:18px 24px;
+  background:rgba(0,0,0,.12);
+}
+
+.details-title{
+  font-size:12px;
+  font-weight:900;
+  color:var(--cyan);
+  letter-spacing:.08em;
+  margin-bottom:8px;
+}
+
+.details p{
+  color:#c4cfdd;
+  line-height:1.8;
+  font-size:14px;
+}
+
+.empty{
+  padding:70px 20px;
+  text-align:center;
+  color:var(--sub);
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+}
+
+.footer{
+  border-top:1px solid var(--line);
+  color:var(--sub);
+  text-align:center;
+  padding:30px 20px;
+  font-size:12px;
+}
+
+@media(max-width:800px){
+  .header-inner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .filters{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .flow{
+    grid-template-columns:1fr;
+  }
+
+  .arrow{
+    transform:rotate(90deg);
+    height:25px;
+  }
+
+  .connection-top{
+    flex-direction:column;
+  }
+}
+
+@media(max-width:500px){
+  .hero,
+  .controls,
+  .stats,
+  .main{
+    padding-left:15px;
+    padding-right:15px;
+  }
+
+  .filters{
+    grid-template-columns:1fr;
+  }
+
+  .title{
+    font-size:20px;
+  }
+
+  .connection-main{
+    padding:18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="header-inner">
+
+    <div class="logo">
+      日本史 <span>CONNECTIONS</span>
+    </div>
+
+    <nav class="nav">
+      <a href="timeline.html">年表</a>
+      <a href="people.html">人物</a>
+      <a href="connections.html" class="active">つながり</a>
+      <a href="quiz.html">一問一答</a>
+      <a href="causes.html">因果関係</a>
+      <a href="mock-exam.html">模試</a>
+    </nav>
+
+  </div>
+</header>
+
+
+<section class="hero">
+
+  <div class="eyebrow">JAPANESE HISTORY / CONNECTIONS</div>
+
+  <h1>日本史の「つながり」</h1>
+
+  <p>
+    出来事を単独で覚えるのではなく、
+    「何が原因で起こり、何につながったのか」を横断的に整理するページ。
+    時代をまたいだ流れや、制度・人物・外交・社会の変化を確認できます。
+  </p>
+
+</section>
+
+
+<section class="controls">
+
+  <input
+    id="search"
+    class="search"
+    type="search"
+    placeholder="出来事・人物・キーワードを検索..."
+  >
+
+  <div class="filters">
+
+    <select id="periodFilter">
+      <option value="">すべての時代</option>
+    </select>
+
+    <select id="typeFilter">
+      <option value="">すべての種類</option>
+    </select>
+
+    <select id="importanceFilter">
+      <option value="">重要度すべて</option>
+      <option value="3">★★★ 最重要</option>
+      <option value="2">★★ 重要</option>
+      <option value="1">★ 基礎</option>
+    </select>
+
+    <select id="directionFilter">
+      <option value="">すべてのつながり</option>
+      <option value="cause">原因 → 結果</option>
+      <option value="institution">制度 → 社会</option>
+      <option value="foreign">外交・海外 → 日本</option>
+      <option value="person">人物 → 出来事</option>
+      <option value="culture">文化 → 社会</option>
+    </select>
+
+  </div>
+
+</section>
+
+
+<div class="stats">
+  <div class="stat">
+    <strong id="displayCount">0</strong>件表示
+  </div>
+
+  <div class="stat">
+    全<strong id="totalCount">0</strong>件
+  </div>
+</div>
+
+
+<main class="main">
+
+  <div id="connectionList" class="connection-list"></div>
+
+</main>
+
+
+<footer class="footer">
+  日本史 CONNECTIONS ｜ 出来事を「点」ではなく「線」で理解する
+</footer>
+
+
+<script>
+
+/* =========================================================
+   日本史 CONNECTIONS DATA
+   後からここに追加していけばOK
+========================================================= */
+
+const connectionData = [
+
+  {
+    id:1,
+    period:"古代",
+    type:"外交・海外 → 日本",
+    direction:"foreign",
+    importance:3,
+    title:"中国・朝鮮半島との交流 → 日本の国家形成",
+    description:"古代日本は東アジアとの交流を通して、政治制度・文字・宗教・文化などを取り入れていった。",
+    fromTitle:"東アジアとの交流",
+    fromText:"中国・朝鮮半島から制度や文化が伝わる。",
+    toTitle:"日本の国家形成",
+    toText:"律令制度や仏教文化などの形成につながる。",
+    detail:"古代日本史では、国内だけで変化したと考えるよりも、東アジアとの交流を背景として見ると流れを理解しやすい。",
+    people:"聖徳太子・中大兄皇子・天武天皇",
+    tags:["東アジア","国家形成","文化交流"]
+  },
+
+  {
+    id:2,
+    period:"飛鳥",
+    type:"制度 → 社会",
+    direction:"institution",
+    importance:3,
+    title:"大化の改新 → 律令国家",
+    description:"中央集権化を進める改革が、後の律令国家形成へつながっていく。",
+    fromTitle:"大化の改新",
+    fromText:"豪族中心の政治から中央集権的な政治へ転換。",
+    toTitle:"律令国家",
+    toText:"律令に基づく国家制度が整えられる。",
+    detail:"645年の乙巳の変をきっかけに政治改革が進み、最終的に大宝律令などによる律令国家の成立へ向かう。",
+    people:"中大兄皇子・中臣鎌足・天武天皇",
+    tags:["大化の改新","律令","中央集権"]
+  },
+
+  {
+    id:3,
+    period:"奈良",
+    type:"制度 → 社会",
+    direction:"institution",
+    importance:3,
+    title:"墾田永年私財法 → 荘園の発達",
+    description:"土地制度の変化が、古代の社会構造を変えていく。",
+    fromTitle:"墾田永年私財法",
+    fromText:"開墾した土地の私有を認める。",
+    toTitle:"荘園の発達",
+    toText:"貴族や寺社などによる土地支配が拡大する。",
+    detail:"743年の墾田永年私財法によって開墾地の私有が認められ、後の荘園発達につながる重要な背景となった。",
+    people:"聖武天皇・貴族・寺社",
+    tags:["土地制度","荘園","奈良時代"]
+  },
+
+  {
+    id:4,
+    period:"平安",
+    type:"制度 → 社会",
+    direction:"institution",
+    importance:3,
+    title:"荘園の発達 → 武士の成長",
+    description:"地方の土地支配の変化は、武士の成長とも深く関係している。",
+    fromTitle:"荘園の発達",
+    fromText:"貴族・寺社などの私有地が広がる。",
+    toTitle:"武士の成長",
+    toText:"土地を守る武装勢力が力を強める。",
+    detail:"荘園や公領をめぐる支配関係が複雑化する中で、地方の武士が成長し、後の武家政権成立につながっていく。",
+    people:"平氏・源氏",
+    tags:["荘園","武士","地方社会"]
+  },
+
+  {
+    id:5,
+    period:"平安",
+    type:"人物 → 出来事",
+    direction:"person",
+    importance:3,
+    title:"院政 → 武士の台頭",
+    description:"院政期の政治的対立は、武士が中央政界で活躍する背景となった。",
+    fromTitle:"院政",
+    fromText:"上皇が院庁を通じて政治を行う。",
+    toTitle:"武士の台頭",
+    toText:"源氏・平氏などが中央政治に進出する。",
+    detail:"院政期には上皇・天皇・摂関家などの政治的関係が複雑になり、武士が軍事力を背景に政治へ関与するようになる。",
+    people:"白河上皇・平清盛・源義朝",
+    tags:["院政","武士","平氏","源氏"]
+  },
+
+  {
+    id:6,
+    period:"鎌倉",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"承久の乱 → 鎌倉幕府の支配強化",
+    description:"朝廷と幕府の対立が、幕府の全国支配をさらに強める結果につながった。",
+    fromTitle:"承久の乱",
+    fromText:"後鳥羽上皇が幕府打倒を目指す。",
+    toTitle:"幕府の支配強化",
+    toText:"六波羅探題の設置などを通じて朝廷への影響力を強める。",
+    detail:"1221年の承久の乱で幕府側が勝利し、朝廷に対する幕府の優位が確立していった。",
+    people:"後鳥羽上皇・北条義時",
+    tags:["承久の乱","北条氏","六波羅探題"]
+  },
+
+  {
+    id:7,
+    period:"鎌倉",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"元寇 → 鎌倉幕府の動揺",
+    description:"元寇は幕府の軍事的負担を増やし、その後の御家人の不満にもつながった。",
+    fromTitle:"元寇",
+    fromText:"蒙古襲来への防衛が必要になる。",
+    toTitle:"幕府の動揺",
+    toText:"御家人への恩賞問題などから不満が強まる。",
+    detail:"元寇では新たな領地を獲得した戦争ではなかったため、幕府は御家人に十分な恩賞を与えにくかった。",
+    people:"北条時宗・フビライ",
+    tags:["元寇","御家人","幕府"]
+  },
+
+  {
+    id:8,
+    period:"室町",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"南北朝の動乱 → 室町幕府の成立",
+    description:"鎌倉幕府滅亡後の政治的混乱を経て、足利氏を中心とする幕府が成立する。",
+    fromTitle:"南北朝の動乱",
+    fromText:"朝廷が南朝と北朝に分かれて対立。",
+    toTitle:"室町幕府",
+    toText:"足利尊氏が武家政権を成立させる。",
+    detail:"1336年に足利尊氏が建武式目を制定し、室町幕府の政治的基盤が形成された。",
+    people:"足利尊氏・後醍醐天皇",
+    tags:["南北朝","足利尊氏","室町幕府"]
+  },
+
+  {
+    id:9,
+    period:"室町",
+    type:"外交・海外 → 日本",
+    direction:"foreign",
+    importance:3,
+    title:"日明貿易 → 室町文化の発展",
+    description:"明との貿易によって多くの物資や文化が日本へもたらされた。",
+    fromTitle:"日明貿易",
+    fromText:"明との間で勘合を用いた貿易が行われる。",
+    toTitle:"室町文化",
+    toText:"中国文化の影響を受けた文化が発展する。",
+    detail:"日明貿易は経済面だけでなく、絵画・建築・思想などの文化交流にも影響を与えた。",
+    people:"足利義満",
+    tags:["日明貿易","勘合貿易","北山文化"]
+  },
+
+  {
+    id:10,
+    period:"室町",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"応仁の乱 → 戦国時代",
+    description:"中央の政治的混乱と各地の争いが、戦国時代の到来につながった。",
+    fromTitle:"応仁の乱",
+    fromText:"将軍家・有力守護などの対立が全国へ広がる。",
+    toTitle:"戦国時代",
+    toText:"各地で戦国大名が勢力を拡大する。",
+    detail:"1467年に始まった応仁の乱は、京都を中心とする大規模な内乱となり、幕府の統制力低下を象徴する出来事となった。",
+    people:"足利義政・細川勝元・山名宗全",
+    tags:["応仁の乱","戦国時代","戦国大名"]
+  },
+
+  {
+    id:11,
+    period:"戦国",
+    type:"外交・海外 → 日本",
+    direction:"foreign",
+    importance:3,
+    title:"鉄砲伝来 → 戦国大名の戦い方の変化",
+    description:"鉄砲の伝来は戦国期の軍事技術に大きな変化をもたらした。",
+    fromTitle:"鉄砲伝来",
+    fromText:"1543年、種子島に鉄砲が伝わる。",
+    toTitle:"戦術の変化",
+    toText:"鉄砲を大量運用する戦法などが発達する。",
+    detail:"鉄砲は各地へ急速に普及し、戦国大名が軍事力を強化するための重要な武器となった。",
+    people:"織田信長・戦国大名",
+    tags:["鉄砲","種子島","長篠"]
+  },
+
+  {
+    id:12,
+    period:"戦国",
+    type:"外交・海外 → 日本",
+    direction:"foreign",
+    importance:3,
+    title:"キリスト教伝来 → 南蛮文化",
+    description:"ヨーロッパとの交流が、日本の宗教・文化・貿易に新しい変化をもたらした。",
+    fromTitle:"キリスト教伝来",
+    fromText:"1549年、フランシスコ・ザビエルが来日。",
+    toTitle:"南蛮文化",
+    toText:"ヨーロッパ由来の文化や物品が広がる。",
+    detail:"キリスト教の伝来と南蛮貿易を通じて、鉄砲・時計・医学などさまざまなヨーロッパ文化が伝わった。",
+    people:"フランシスコ・ザビエル",
+    tags:["キリスト教","南蛮文化","南蛮貿易"]
+  },
+
+  {
+    id:13,
+    period:"安土桃山",
+    type:"制度 → 社会",
+    direction:"institution",
+    importance:3,
+    title:"太閤検地 → 兵農分離",
+    description:"土地と身分を把握する政策が、近世社会の身分秩序形成につながった。",
+    fromTitle:"太閤検地",
+    fromText:"土地の面積・収穫高などを調査する。",
+    toTitle:"兵農分離",
+    toText:"武士と農民の身分的区別が進む。",
+    detail:"豊臣秀吉の検地は年貢徴収の基礎を整えるだけでなく、土地支配と身分秩序の固定化にもつながった。",
+    people:"豊臣秀吉",
+    tags:["太閤検地","兵農分離","豊臣秀吉"]
+  },
+
+  {
+    id:14,
+    period:"江戸",
+    type:"制度 → 社会",
+    direction:"institution",
+    importance:3,
+    title:"幕藩体制 → 大名統制",
+    description:"江戸幕府は大名を統制することで全国支配を安定させた。",
+    fromTitle:"幕藩体制",
+    fromText:"幕府と藩による支配体制が形成される。",
+    toTitle:"大名統制",
+    toText:"武家諸法度や参勤交代などで大名を統制する。",
+    detail:"幕府は大名を取り込む一方で、軍事・政治面から統制し、長期的な政治秩序を維持した。",
+    people:"徳川家康・徳川家光",
+    tags:["幕藩体制","武家諸法度","参勤交代"]
+  },
+
+  {
+    id:15,
+    period:"江戸",
+    type:"制度 → 社会",
+    direction:"institution",
+    importance:3,
+    title:"鎖国体制 → 限定的な対外交流",
+    description:"江戸幕府は海外との交流を完全に断ったわけではなく、限られた窓口を通して交流を続けた。",
+    fromTitle:"鎖国体制",
+    fromText:"海外との交流を幕府が厳しく管理する。",
+    toTitle:"四つの口",
+    toText:"長崎・対馬・薩摩・松前などを通じて交流する。",
+    detail:"長崎ではオランダ・中国、対馬では朝鮮、薩摩では琉球、松前ではアイヌとの関係があった。",
+    people:"徳川家光・幕府",
+    tags:["鎖国","長崎","対馬","薩摩","松前"]
+  },
+
+  {
+    id:16,
+    period:"江戸",
+    type:"文化 → 社会",
+    direction:"culture",
+    importance:2,
+    title:"都市の発達 → 元禄文化",
+    description:"三都を中心とした都市経済の発展が、町人文化の成長を支えた。",
+    fromTitle:"都市の発達",
+    fromText:"江戸・大坂・京都などの都市が発展する。",
+    toTitle:"元禄文化",
+    toText:"町人を担い手とする文化が栄える。",
+    detail:"商業の発達や町人層の成長を背景として、井原西鶴・近松門左衛門・松尾芭蕉などが活躍した。",
+    people:"井原西鶴・近松門左衛門・松尾芭蕉",
+    tags:["元禄文化","町人","都市"]
+  },
+
+  {
+    id:17,
+    period:"江戸",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"商品経済の発達 → 農村社会の変化",
+    description:"貨幣経済の浸透は農村にも影響を与え、農民層の分化を進めた。",
+    fromTitle:"商品経済",
+    fromText:"農産物や特産品の売買が盛んになる。",
+    toTitle:"農民層の分化",
+    toText:"地主・豪農などと困窮する農民の差が広がる。",
+    detail:"江戸時代後期には商品作物や農村工業が発達し、農村内部の経済格差も拡大していった。",
+    people:"豪農・商人",
+    tags:["商品経済","農村","農民層"]
+  },
+
+  {
+    id:18,
+    period:"江戸",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"幕府財政の悪化 → 三大改革",
+    description:"幕府の財政難や社会不安への対応として、享保・寛政・天保の改革が行われた。",
+    fromTitle:"幕府財政の悪化",
+    fromText:"支出増加や収入不足などから財政が苦しくなる。",
+    toTitle:"三大改革",
+    toText:"享保・寛政・天保の改革が行われる。",
+    detail:"改革の内容はそれぞれ異なるが、幕府財政の立て直しや社会秩序の再建が大きな課題となった。",
+    people:"徳川吉宗・松平定信・水野忠邦",
+    tags:["享保の改革","寛政の改革","天保の改革"]
+  },
+
+  {
+    id:19,
+    period:"江戸",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"外国船の接近 → 幕府の海防政策",
+    description:"ロシア・イギリス・アメリカなどの接近は、幕府の外交・海防政策に影響を与えた。",
+    fromTitle:"外国船の接近",
+    fromText:"19世紀に外国船が日本近海へ現れる。",
+    toTitle:"海防政策",
+    toText:"異国船打払令などの政策が出される。",
+    detail:"外国との緊張が高まる中で、幕府は海防を強化したが、最終的には開国へと向かうことになる。",
+    people:"幕府・高島秋帆",
+    tags:["異国船","海防","開国"]
+  },
+
+  {
+    id:20,
+    period:"江戸",
+    type:"外交・海外 → 日本",
+    direction:"foreign",
+    importance:3,
+    title:"ペリー来航 → 開国",
+    description:"アメリカの圧力をきっかけとして、幕府の外交政策は大きく転換した。",
+    fromTitle:"ペリー来航",
+    fromText:"1853年、浦賀にペリーが来航する。",
+    toTitle:"開国",
+    toText:"日米和親条約を結び、下田・箱館を開港する。",
+    detail:"1853年のペリー来航は幕府の外交方針を大きく揺さぶり、1854年の日米和親条約へとつながった。",
+    people:"ペリー・徳川家慶・阿部正弘",
+    tags:["ペリー","日米和親条約","開国"]
+  },
+
+  {
+    id:21,
+    period:"幕末",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"不平等条約 → 条約改正運動",
+    description:"関税自主権や領事裁判権をめぐる問題が、明治政府の外交課題となった。",
+    fromTitle:"不平等条約",
+    fromText:"領事裁判権を認め、関税自主権が制限される。",
+    toTitle:"条約改正",
+    toText:"明治政府が条約改正を進める。",
+    detail:"幕末に結ばれた不平等条約は明治政府にも引き継がれ、長期的な外交課題となった。",
+    people:"井上馨・陸奥宗光・小村寿太郎",
+    tags:["不平等条約","条約改正","外交"]
+  },
+
+  {
+    id:22,
+    period:"明治",
+    type:"制度 → 社会",
+    direction:"institution",
+    importance:3,
+    title:"廃藩置県 → 中央集権国家",
+    description:"藩を廃止して府県を置くことで、明治政府の中央集権化が進んだ。",
+    fromTitle:"廃藩置県",
+    fromText:"1871年、藩を廃止して府県を設置する。",
+    toTitle:"中央集権国家",
+    toText:"政府が全国を直接統治する体制が強まる。",
+    detail:"廃藩置県は明治政府による中央集権化の重要な転換点となった。",
+    people:"明治政府・大久保利通",
+    tags:["廃藩置県","中央集権","明治維新"]
+  },
+
+  {
+    id:23,
+    period:"明治",
+    type:"制度 → 社会",
+    direction:"institution",
+    importance:3,
+    title:"徴兵令 → 国民国家形成",
+    description:"徴兵制度は軍事制度だけでなく、近代国家の国民統合とも関係した。",
+    fromTitle:"徴兵令",
+    fromText:"1873年、徴兵制度を導入する。",
+    toTitle:"国民国家形成",
+    toText:"身分を越えて国家と国民を結びつける制度となる。",
+    detail:"徴兵令は士族だけでなく広く国民を対象とする近代的軍制の形成につながった。",
+    people:"山県有朋・明治政府",
+    tags:["徴兵令","軍制","国民国家"]
+  },
+
+  {
+    id:24,
+    period:"明治",
+    type:"制度 → 社会",
+    direction:"institution",
+    importance:3,
+    title:"地租改正 → 明治政府の財政基盤",
+    description:"地租改正によって政府は安定した租税収入を確保しようとした。",
+    fromTitle:"地租改正",
+    fromText:"土地所有者に地券を発行し、地価を基準に地租を課す。",
+    toTitle:"政府財政",
+    toText:"近代国家建設のための財政基盤が整えられる。",
+    detail:"地租改正は明治政府の重要な財政改革であり、近代的な租税制度の形成につながった。",
+    people:"明治政府",
+    tags:["地租改正","地券","財政"]
+  },
+
+  {
+    id:25,
+    period:"明治",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"自由民権運動 → 国会開設",
+    description:"国民の政治参加を求める運動が高まり、政府は国会開設を約束する。",
+    fromTitle:"自由民権運動",
+    fromText:"国会開設や憲法制定を求める運動が広がる。",
+    toTitle:"国会開設",
+    toText:"1881年、国会開設の勅諭が出される。",
+    detail:"自由民権運動は政府に対する政治的要求を強め、1881年の国会開設の勅諭につながった。",
+    people:"板垣退助・大隈重信・伊藤博文",
+    tags:["自由民権運動","国会","憲法"]
+  },
+
+  {
+    id:26,
+    period:"明治",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"日清戦争 → 日本の国際的地位の変化",
+    description:"日清戦争での日本の勝利は、日本と東アジアの国際関係を大きく変化させた。",
+    fromTitle:"日清戦争",
+    fromText:"1894〜1895年、日本と清が戦争する。",
+    toTitle:"国際的地位の変化",
+    toText:"日本が東アジアの列強として存在感を強める。",
+    detail:"下関条約によって清から台湾などを得た一方、三国干渉を受けるなど列強との関係も変化した。",
+    people:"伊藤博文・陸奥宗光",
+    tags:["日清戦争","下関条約","三国干渉"]
+  },
+
+  {
+    id:27,
+    period:"明治",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"日露戦争 → 韓国支配の強化",
+    description:"日露戦争後、日本は朝鮮半島への支配を強めていく。",
+    fromTitle:"日露戦争",
+    fromText:"1904〜1905年、日本とロシアが戦争する。",
+    toTitle:"韓国支配",
+    toText:"日本の韓国に対する支配権が強まる。",
+    detail:"ポーツマス条約などを経て、日本は韓国への影響力を強め、1905年には韓国の外交権を制限した。",
+    people:"伊藤博文・桂太郎",
+    tags:["日露戦争","韓国統監府","韓国併合"]
+  },
+
+  {
+    id:28,
+    period:"大正",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"第一次世界大戦 → 大正デモクラシー",
+    description:"第一次世界大戦後の社会・経済の変化は、日本の政治にも影響を与えた。",
+    fromTitle:"第一次世界大戦",
+    fromText:"日本は連合国側として参戦し、輸出が拡大する。",
+    toTitle:"大正デモクラシー",
+    toText:"政党政治や民意を重視する動きが強まる。",
+    detail:"戦後の社会変化や米騒動などを背景に、原敬内閣など政党政治が発展していった。",
+    people:"原敬・吉野作造",
+    tags:["第一次世界大戦","大正デモクラシー","政党政治"]
+  },
+
+  {
+    id:29,
+    period:"大正",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"米騒動 → 政党内閣",
+    description:"1918年の米騒動は寺内内閣の退陣につながり、原敬内閣が成立する。",
+    fromTitle:"米騒動",
+    fromText:"米価高騰を背景に全国的な騒動が起こる。",
+    toTitle:"原敬内閣",
+    toText:"本格的な政党内閣が成立する。",
+    detail:"1918年の米騒動後、寺内正毅内閣が退陣し、立憲政友会の原敬が首相となった。",
+    people:"原敬・寺内正毅",
+    tags:["米騒動","原敬","政党内閣"]
+  },
+
+  {
+    id:30,
+    period:"昭和",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"世界恐慌 → 軍部の影響力拡大",
+    description:"経済不況と社会不安が深刻化し、政治の不安定化につながった。",
+    fromTitle:"世界恐慌",
+    fromText:"1929年、世界的な経済恐慌が発生する。",
+    toTitle:"軍部の影響力拡大",
+    toText:"政党政治への不信が強まり、軍部の発言力が増す。",
+    detail:"昭和恐慌による農村や都市の不況は社会不安を強め、満州事変以後の軍部の政治的影響力拡大の背景となった。",
+    people:"浜口雄幸・高橋是清・軍部",
+    tags:["世界恐慌","昭和恐慌","軍部"]
+  },
+
+  {
+    id:31,
+    period:"昭和",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"満州事変 → 日中戦争への拡大",
+    description:"満州事変をきっかけに日本の中国大陸での軍事行動が拡大していく。",
+    fromTitle:"満州事変",
+    fromText:"1931年、関東軍が満州事変を起こす。",
+    toTitle:"日中戦争",
+    toText:"中国との戦争が全面化する。",
+    detail:"満州事変後、日本は満州国を成立させ、1937年の日中戦争へと戦線を拡大していった。",
+    people:"関東軍・蒋介石",
+    tags:["満州事変","満州国","日中戦争"]
+  },
+
+  {
+    id:32,
+    period:"昭和",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"日中戦争 → 太平洋戦争",
+    description:"中国との戦争が長期化する中で、日本とアメリカなどとの対立が深まり、太平洋戦争へつながった。",
+    fromTitle:"日中戦争",
+    fromText:"1937年以降、中国との戦争が長期化する。",
+    toTitle:"太平洋戦争",
+    toText:"1941年、日米開戦に至る。",
+    detail:"日中戦争の長期化と資源問題、アメリカとの対立などが重なり、1941年の太平洋戦争開始へとつながった。",
+    people:"近衛文麿・東条英機・ルーズベルト",
+    tags:["日中戦争","太平洋戦争","日米関係"]
+  },
+
+  {
+    id:33,
+    period:"昭和",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"太平洋戦争 → 日本の戦後改革",
+    description:"敗戦を経て、日本では占領下で政治・経済・社会の大改革が行われた。",
+    fromTitle:"太平洋戦争",
+    fromText:"1941〜1945年、日本と連合国が戦争する。",
+    toTitle:"戦後改革",
+    toText:"日本国憲法・農地改革などが進められる。",
+    detail:"1945年の敗戦後、GHQの占領下で政治・経済・社会の民主化を目指す改革が進められた。",
+    people:"マッカーサー・吉田茂",
+    tags:["敗戦","GHQ","戦後改革"]
+  },
+
+  {
+    id:34,
+    period:"戦後",
+    type:"制度 → 社会",
+    direction:"institution",
+    importance:3,
+    title:"日本国憲法 → 戦後民主主義",
+    description:"日本国憲法は基本的人権の尊重や国民主権などを掲げ、戦後日本の政治制度の基礎となった。",
+    fromTitle:"日本国憲法",
+    fromText:"1946年公布、1947年施行。",
+    toTitle:"戦後民主主義",
+    toText:"国民主権・基本的人権・平和主義を基本原理とする政治が展開する。",
+    detail:"日本国憲法は戦後日本の政治・社会を理解するうえで重要な基盤となっている。",
+    people:"幣原喜重郎・吉田茂",
+    tags:["日本国憲法","国民主権","基本的人権"]
+  },
+
+  {
+    id:35,
+    period:"戦後",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"朝鮮戦争 → 日本経済の復興",
+    description:"朝鮮戦争に伴う特需は、日本経済の復興を後押しした。",
+    fromTitle:"朝鮮戦争",
+    fromText:"1950年、朝鮮戦争が始まる。",
+    toTitle:"特需景気",
+    toText:"米軍からの大量の発注が日本企業に入る。",
+    detail:"朝鮮戦争による特需は日本経済の復興を促進し、高度経済成長へ向かう背景の一つとなった。",
+    people:"吉田茂",
+    tags:["朝鮮戦争","特需景気","経済復興"]
+  },
+
+  {
+    id:36,
+    period:"戦後",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"高度経済成長 → 生活水準の向上と公害",
+    description:"経済成長によって生活は豊かになる一方、公害などの社会問題も深刻化した。",
+    fromTitle:"高度経済成長",
+    fromText:"1950年代後半から1970年代初頭に経済が急速に成長する。",
+    toTitle:"社会の変化",
+    toText:"三種の神器の普及などとともに公害問題も発生する。",
+    detail:"高度経済成長は所得や生活水準を大きく向上させた一方、水俣病など深刻な公害問題も引き起こした。",
+    people:"池田勇人・田中角栄",
+    tags:["高度経済成長","公害","三種の神器"]
+  },
+
+  {
+    id:37,
+    period:"戦後",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:3,
+    title:"第一次石油危機 → 高度経済成長の終焉",
+    description:"1973年の石油危機は、日本経済の成長パターンを大きく変えた。",
+    fromTitle:"第一次石油危機",
+    fromText:"1973年、原油価格が大幅に上昇する。",
+    toTitle:"安定成長",
+    toText:"高度経済成長が終わり、低成長の時代へ移る。",
+    detail:"石油価格の急上昇によって日本経済は大きな影響を受け、高度経済成長は終わりを迎えた。",
+    people:"田中角栄",
+    tags:["石油危機","高度経済成長","安定成長"]
+  },
+
+  {
+    id:38,
+    period:"戦後",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:2,
+    title:"バブル経済 → バブル崩壊",
+    description:"資産価格の急騰と金融政策などを背景とするバブル経済は、1990年代初頭に崩壊した。",
+    fromTitle:"バブル経済",
+    fromText:"1980年代後半に株価や地価が大きく上昇する。",
+    toTitle:"バブル崩壊",
+    toText:"1990年代初頭から資産価格が下落する。",
+    detail:"バブル崩壊後、日本経済は長期的な景気停滞を経験することになった。",
+    people:"中曽根康弘・竹下登",
+    tags:["バブル経済","バブル崩壊","平成"]
+  },
+
+  {
+    id:39,
+    period:"戦後",
+    type:"原因 → 結果",
+    direction:"cause",
+    importance:2,
+    title:"東日本大震災 → 社会・エネルギー政策の変化",
+    description:"2011年の震災と原発事故は、日本社会やエネルギー政策に大きな影響を与えた。",
+    fromTitle:"東日本大震災",
+    fromText:"2011年3月11日に巨大地震と津波が発生する。",
+    toTitle:"社会・政策の変化",
+    toText:"防災やエネルギー政策への関心が高まる。",
+    detail:"東日本大震災は東北地方を中心に甚大な被害をもたらし、社会・経済・エネルギー政策にも大きな影響を与えた。",
+    people:"政府・自治体・被災者",
+    tags:["東日本大震災","防災","エネルギー"]
+  },
+
+  {
+    id:40,
+    period:"全時代",
+    type:"文化 → 社会",
+    direction:"culture",
+    importance:3,
+    title:"日本文化の変化 → 社会構造の変化",
+    description:"日本史では政治だけでなく、文化の担い手が変化することで社会の変化を読み取ることができる。",
+    fromTitle:"貴族文化 → 武家文化 → 町人文化",
+    fromText:"時代ごとに文化の中心となる層が変化する。",
+    toTitle:"社会構造の変化",
+    toText:"政治・経済・都市の発展と文化が相互に影響する。",
+    detail:"国風文化、武家文化、町人文化などを比較すると、それぞれの時代の社会構造や経済の特徴を理解しやすい。",
+    people:"紫式部・足利義満・井原西鶴",
+    tags:["文化史","社会史","比較"]
+  }
+
+];
+
+
+/* =========================================================
+   HTML安全化
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   FILTER INITIALIZE
+========================================================= */
+
+function initFilters(){
+
+  const periodFilter =
+    document.getElementById("periodFilter");
+
+  const typeFilter =
+    document.getElementById("typeFilter");
+
+  const periods =
+    [...new Set(connectionData.map(item => item.period))];
+
+  const types =
+    [...new Set(connectionData.map(item => item.type))];
+
+  periods.forEach(period => {
+
+    const option = document.createElement("option");
+
+    option.value = period;
+    option.textContent = period;
+
+    periodFilter.appendChild(option);
+
+  });
+
+  types.forEach(type => {
+
+    const option = document.createElement("option");
+
+    option.value = type;
+    option.textContent = type;
+
+    typeFilter.appendChild(option);
+
+  });
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(){
+
+  const list =
+    document.getElementById("connectionList");
+
+  const search =
+    document.getElementById("search")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const period =
+    document.getElementById("periodFilter").value;
+
+  const type =
+    document.getElementById("typeFilter").value;
+
+  const importance =
+    document.getElementById("importanceFilter").value;
+
+  const direction =
+    document.getElementById("directionFilter").value;
+
+
+  const filtered =
+    connectionData.filter(item => {
+
+      const targetText = [
+        item.title,
+        item.description,
+        item.fromTitle,
+        item.fromText,
+        item.toTitle,
+        item.toText,
+        item.detail,
+        item.people,
+        item.period,
+        item.type,
+        ...item.tags
+      ].join(" ").toLowerCase();
+
+
+      if(search && !targetText.includes(search)){
+        return false;
+      }
+
+      if(period && item.period !== period){
+        return false;
+      }
+
+      if(type && item.type !== type){
+        return false;
+      }
+
+      if(
+        importance &&
+        String(item.importance) !== importance
+      ){
+        return false;
+      }
+
+      if(direction && item.direction !== direction){
+        return false;
+      }
+
+      return true;
+
+    });
+
+
+  document.getElementById("displayCount")
+    .textContent = filtered.length;
+
+  document.getElementById("totalCount")
+    .textContent = connectionData.length;
+
+
+  if(filtered.length === 0){
+
+    list.innerHTML = `
+      <div class="empty">
+        条件に一致するつながりがありません。
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    filtered.map((item,index) => {
+
+      const stars =
+        "★".repeat(item.importance) +
+        "☆".repeat(3-item.importance);
+
+
+      return `
+
+        <article class="connection">
+
+          <div class="connection-main">
+
+            <div class="connection-top">
+
+              <div>
+
+                <div class="number">
+                  CONNECTION ${String(index+1).padStart(2,"0")}
+                </div>
+
+                <div class="title">
+                  ${escapeHTML(item.title)}
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <p class="description">
+              ${escapeHTML(item.description)}
+            </p>
+
+
+            <div class="badges">
+
+              <span class="badge period">
+                ${escapeHTML(item.period)}
+              </span>
+
+              <span class="badge">
+                ${escapeHTML(item.type)}
+              </span>
+
+              <span class="badge cause">
+                ${stars}
+              </span>
+
+              <span class="badge people">
+                ${escapeHTML(item.people)}
+              </span>
+
+              ${
+                item.tags.map(tag => `
+                  <span class="badge">
+                    #${escapeHTML(tag)}
+                  </span>
+                `).join("")
+              }
+
+            </div>
+
+
+            <div class="flow">
+
+              <div class="node">
+
+                <div class="node-label">
+                  FROM / 背景・原因
+                </div>
+
+                <h3>
+                  ${escapeHTML(item.fromTitle)}
+                </h3>
+
+                <p>
+                  ${escapeHTML(item.fromText)}
+                </p>
+
+              </div>
+
+
+              <div class="arrow">
+                →
+              </div>
+
+
+              <div class="node">
+
+                <div class="node-label">
+                  TO / 結果・変化
+                </div>
+
+                <h3>
+                  ${escapeHTML(item.toTitle)}
+                </h3>
+
+                <p>
+                  ${escapeHTML(item.toText)}
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="details">
+
+            <div class="details-title">
+              WHY IT MATTERS
+            </div>
+
+            <p>
+              ${escapeHTML(item.detail)}
+            </p>
+
+          </div>
+
+        </article>
+
+      `;
+
+    }).join("");
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document
+  .getElementById("search")
+  .addEventListener("input",render);
+
+document
+  .getElementById("periodFilter")
+  .addEventListener("change",render);
+
+document
+  .getElementById("typeFilter")
+  .addEventListener("change",render);
+
+document
+  .getElementById("importanceFilter")
+  .addEventListener("change",render);
+
+document
+  .getElementById("directionFilter")
+  .addEventListener("change",render);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+initFilters();
+render();
+
+</script>
+
+</body>
+</html>
