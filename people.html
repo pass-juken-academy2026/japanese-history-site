@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>日本史人物DB | 100人版</title>
+
+<style>
+:root{
+  --bg:#070b12;
+  --panel:#0d1420;
+  --panel2:#111b2a;
+  --line:#24344b;
+  --text:#e8f0fa;
+  --muted:#8ea1b8;
+  --cyan:#45d9ff;
+  --blue:#5c8dff;
+  --green:#50e3a4;
+  --orange:#ffb45c;
+  --red:#ff6b81;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(69,217,255,.10),transparent 30%),
+    radial-gradient(circle at 90% 10%,rgba(92,141,255,.10),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;
+}
+a{color:inherit;text-decoration:none}
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(7,11,18,.88);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.nav{
+  max-width:1200px;
+  margin:auto;
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.logo{
+  font-weight:900;
+  letter-spacing:.08em;
+  color:var(--cyan);
+}
+.navlinks{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.navlinks a{
+  padding:7px 10px;
+  color:var(--muted);
+  border-radius:8px;
+  font-size:13px;
+}
+.navlinks a:hover{
+  color:var(--text);
+  background:var(--panel2);
+}
+main{
+  max-width:1200px;
+  margin:auto;
+  padding:50px 20px 80px;
+}
+.hero{
+  padding:20px 0 35px;
+}
+.eyebrow{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.18em;
+}
+h1{
+  margin:10px 0;
+  font-size:clamp(32px,6vw,64px);
+  line-height:1;
+}
+.hero p{
+  color:var(--muted);
+  max-width:720px;
+  line-height:1.8;
+}
+.controls{
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:10px;
+  margin-bottom:20px;
+}
+input,select{
+  width:100%;
+  background:var(--panel);
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px 14px;
+  outline:none;
+}
+input:focus,select:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 2px rgba(69,217,255,.1);
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:25px;
+}
+.stat{
+  background:linear-gradient(145deg,var(--panel),#0a111c);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+}
+.stat small{
+  color:var(--muted);
+}
+.stat strong{
+  display:block;
+  font-size:24px;
+  margin-top:5px;
+  color:var(--cyan);
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.card{
+  background:linear-gradient(145deg,rgba(17,27,42,.98),rgba(10,16,26,.98));
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:18px;
+  cursor:pointer;
+  transition:.2s;
+  position:relative;
+  overflow:hidden;
+}
+.card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(69,217,255,.55);
+  box-shadow:0 12px 35px rgba(0,0,0,.25);
+}
+.card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:2px;
+  background:linear-gradient(90deg,var(--cyan),transparent);
+}
+.badges{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+.badge{
+  font-size:11px;
+  padding:4px 7px;
+  border-radius:999px;
+  background:#162337;
+  color:#9fb4cd;
+  border:1px solid #253a55;
+}
+.rank{
+  color:var(--orange);
+}
+.card h2{
+  margin:0 0 5px;
+  font-size:21px;
+}
+.reading{
+  color:var(--muted);
+  font-size:12px;
+}
+.role{
+  margin-top:12px;
+  color:var(--cyan);
+  font-weight:700;
+  font-size:13px;
+}
+.card p{
+  color:#aebdce;
+  font-size:13px;
+  line-height:1.7;
+  margin-bottom:0;
+}
+.empty{
+  padding:60px 20px;
+  text-align:center;
+  color:var(--muted);
+  border:1px dashed var(--line);
+  border-radius:15px;
+  grid-column:1/-1;
+}
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:50;
+}
+.modal.show{display:flex}
+.modal-box{
+  width:min(720px,100%);
+  max-height:85vh;
+  overflow:auto;
+  background:#0b121d;
+  border:1px solid #30445f;
+  border-radius:20px;
+  padding:26px;
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+.close{
+  float:right;
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:var(--text);
+  border-radius:8px;
+  width:34px;
+  height:34px;
+  cursor:pointer;
+}
+.modal h2{
+  margin:10px 0 3px;
+  font-size:32px;
+}
+.modal .reading{
+  font-size:14px;
+}
+.detail{
+  margin-top:25px;
+  display:grid;
+  gap:15px;
+}
+.detail-box{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:15px;
+}
+.detail-box strong{
+  display:block;
+  color:var(--cyan);
+  font-size:12px;
+  margin-bottom:6px;
+}
+.detail-box p{
+  margin:0;
+  line-height:1.8;
+  color:#c2cedb;
+}
+footer{
+  text-align:center;
+  padding:30px;
+  color:#66788f;
+  font-size:12px;
+}
+@media(max-width:850px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .controls{grid-template-columns:1fr 1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:560px){
+  .nav{align-items:flex-start;flex-direction:column}
+  .grid{grid-template-columns:1fr}
+  .controls{grid-template-columns:1fr}
+  main{padding-top:30px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">NIHONSHI // PEOPLE</div>
+
+    <nav class="navlinks">
+      <a href="timeline.html">年表</a>
+      <a href="people.html">人物</a>
+      <a href="connections.html">つながり</a>
+      <a href="quiz.html">クイズ</a>
+      <a href="causes.html">因果</a>
+      <a href="mock-exam.html">模試</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <div class="eyebrow">JAPANESE HISTORY / PEOPLE DATABASE</div>
+  <h1>日本史人物<br>100 DATABASE</h1>
+  <p>
+    日本史の流れを人物から整理するための人物データベース。
+    検索・時代・分野で絞り込み、人物をクリックすると重要事項を確認できます。
+  </p>
+</section>
+
+<section class="controls">
+  <input id="search" type="text" placeholder="人物名・よみ・キーワードで検索">
+
+  <select id="era">
+    <option value="">すべての時代</option>
+    <option>古代</option>
+    <option>中世</option>
+    <option>近世</option>
+    <option>近代</option>
+    <option>現代</option>
+  </select>
+
+  <select id="category">
+    <option value="">すべての分野</option>
+    <option>天皇・皇族</option>
+    <option>政治家</option>
+    <option>武将・軍人</option>
+    <option>僧侶・宗教</option>
+    <option>学者</option>
+    <option>文化人</option>
+    <option>思想家</option>
+    <option>外国人</option>
+  </select>
+
+  <select id="importance">
+    <option value="">重要度すべて</option>
+    <option value="S">Sランク</option>
+    <option value="A">Aランク</option>
+    <option value="B">Bランク</option>
+  </select>
+</section>
+
+<section class="stats">
+  <div class="stat">
+    <small>収録人物</small>
+    <strong id="total">100</strong>
+  </div>
+  <div class="stat">
+    <small>表示中</small>
+    <strong id="shown">100</strong>
+  </div>
+  <div class="stat">
+    <small>古代〜中世</small>
+    <strong id="oldCount">0</strong>
+  </div>
+  <div class="stat">
+    <small>近世〜現代</small>
+    <strong id="newCount">0</strong>
+  </div>
+</section>
+
+<section id="grid" class="grid"></section>
+
+</main>
+
+<footer>
+  JAPANESE HISTORY STUDY PORTAL / PEOPLE DATABASE
+</footer>
+
+<div id="modal" class="modal">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal()">×</button>
+
+    <div class="badges">
+      <span id="mEra" class="badge"></span>
+      <span id="mCategory" class="badge"></span>
+      <span id="mImportance" class="badge rank"></span>
+    </div>
+
+    <h2 id="mName"></h2>
+    <div id="mReading" class="reading"></div>
+
+    <div class="detail">
+      <div class="detail-box">
+        <strong>人物の立場</strong>
+        <p id="mRole"></p>
+      </div>
+
+      <div class="detail-box">
+        <strong>重要ポイント</strong>
+        <p id="mPoint"></p>
+      </div>
+
+      <div class="detail-box">
+        <strong>関連事項</strong>
+        <p id="mEvents"></p>
+      </div>
+
+      <div class="detail-box">
+        <strong>覚え方・入試ポイント</strong>
+        <p id="mExam"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+/*
+=========================================================
+ 日本史人物DATABASE
+ まず100人版。
+ 追加するときは、この配列に101人目以降を追加するだけ。
+=========================================================
+*/
+
+const peopleData = [
+
+/* ===== 古代 ===== */
+
+{
+ id:1,name:"卑弥呼",reading:"ひみこ",era:"古代",category:"政治家",importance:"S",
+ role:"邪馬台国の女王",
+ point:"魏志倭人伝に登場する邪馬台国の女王。239年に魏へ使者を送り、親魏倭王の称号と金印などを受けたとされる。",
+ events:"邪馬台国・魏志倭人伝・239年・親魏倭王",
+ exam:"卑弥呼＝邪馬台国＝239年＝魏。ここをセットで覚える。"
+},
+
+{
+ id:2,name:"聖徳太子",reading:"しょうとくたいし",era:"古代",category:"天皇・皇族",importance:"S",
+ role:"厩戸王・推古朝の政治家",
+ point:"推古天皇のもとで政治を行い、冠位十二階や十七条憲法、遣隋使派遣などに関わったとされる。",
+ events:"推古天皇・冠位十二階・十七条憲法・遣隋使",
+ exam:"厩戸王＝聖徳太子。推古朝の政治改革と隋との外交を結びつける。"
+},
+
+{
+ id:3,name:"推古天皇",reading:"すいこてんのう",era:"古代",category:"天皇・皇族",importance:"A",
+ role:"第33代天皇",
+ point:"日本初の女性天皇。厩戸王らを登用し、飛鳥の政治改革を進めた。",
+ events:"推古朝・厩戸王・冠位十二階・遣隋使",
+ exam:"推古天皇の時代に厩戸王による政治改革が進んだ。"
+},
+
+{
+ id:4,name:"蘇我馬子",reading:"そがのうまこ",era:"古代",category:"政治家",importance:"A",
+ role:"飛鳥時代の大臣",
+ point:"蘇我氏の有力者。物部氏と対立し、仏教受容をめぐる争いにも関わった。",
+ events:"蘇我氏・物部氏・崇峻天皇・飛鳥寺",
+ exam:"蘇我馬子＝仏教受容を支持＝物部守屋と対立。"
+},
+
+{
+ id:5,name:"物部守屋",reading:"もののべのもりや",era:"古代",category:"政治家",importance:"A",
+ role:"物部氏の有力者",
+ point:"仏教受容に反対した豪族。蘇我馬子と対立し、587年に滅ぼされた。",
+ events:"物部氏・蘇我氏・仏教受容",
+ exam:"蘇我氏と物部氏の対立は、仏教受容問題と結びつけて覚える。"
+},
+
+{
+ id:6,name:"小野妹子",reading:"おののいもこ",era:"古代",category:"政治家",importance:"A",
+ role:"遣隋使",
+ point:"推古朝に遣隋使として隋へ派遣された人物。隋の皇帝煬帝への国書で知られる。",
+ events:"遣隋使・隋・煬帝",
+ exam:"小野妹子＝遣隋使。『日出づる処の天子』の国書と関連。"
+},
+
+{
+ id:7,name:"中大兄皇子",reading:"なかのおおえのおうじ",era:"古代",category:"天皇・皇族",importance:"S",
+ role:"のちの天智天皇",
+ point:"中臣鎌足とともに蘇我氏を打倒し、乙巳の変を起こした。その後、大化の改新を進めた。",
+ events:"乙巳の変・大化の改新・天智天皇",
+ exam:"中大兄皇子＋中臣鎌足＝乙巳の変。後の天智天皇。"
+},
+
+{
+ id:8,name:"中臣鎌足",reading:"なかとみのかまたり",era:"古代",category:"政治家",importance:"S",
+ role:"中大兄皇子の政治的協力者",
+ point:"中大兄皇子とともに蘇我入鹿を倒し、藤原氏の祖となった。",
+ events:"乙巳の変・大化の改新・藤原氏",
+ exam:"中臣鎌足＝藤原鎌足。藤原氏の祖。"
+},
+
+{
+ id:9,name:"天智天皇",reading:"てんじてんのう",era:"古代",category:"天皇・皇族",importance:"S",
+ role:"第38代天皇",
+ point:"中大兄皇子として改革を進め、即位後は近江大津宮を都とした。近江令にも関係する。",
+ events:"乙巳の変・大化の改新・近江大津宮・白村江",
+ exam:"中大兄皇子→天智天皇。白村江の戦いと関連。"
+},
+
+{
+ id:10,name:"天武天皇",reading:"てんむてんのう",era:"古代",category:"天皇・皇族",importance:"S",
+ role:"第40代天皇",
+ point:"壬申の乱に勝利して即位。律令国家形成を進めた。",
+ events:"壬申の乱・飛鳥浄御原宮・八色の姓",
+ exam:"天武天皇＝壬申の乱。律令国家形成の重要人物。"
+},
+
+{
+ id:11,name:"持統天皇",reading:"じとうてんのう",era:"古代",category:"天皇・皇族",importance:"A",
+ role:"第41代天皇",
+ point:"天武天皇の政策を継承し、藤原京を完成させた。",
+ events:"藤原京・飛鳥浄御原令・天武天皇",
+ exam:"持統天皇＝藤原京。天武天皇の政策継承。"
+},
+
+{
+ id:12,name:"藤原不比等",reading:"ふじわらのふひと",era:"古代",category:"政治家",importance:"S",
+ role:"律令国家の有力官人",
+ point:"藤原氏の勢力を拡大し、律令政治の形成に深く関わった。",
+ events:"大宝律令・養老律令・藤原氏",
+ exam:"藤原不比等＝律令国家形成＋藤原氏発展。"
+},
+
+{
+ id:13,name:"元明天皇",reading:"げんめいてんのう",era:"古代",category:"天皇・皇族",importance:"A",
+ role:"第43代天皇",
+ point:"710年に平城京へ遷都した天皇。古事記・風土記の編纂にも関係する時代。",
+ events:"平城京・古事記・風土記",
+ exam:"710年平城京＝元明天皇。"
+},
+
+{
+ id:14,name:"元正天皇",reading:"げんしょうてんのう",era:"古代",category:"天皇・皇族",importance:"B",
+ role:"第44代天皇",
+ point:"養老律令が成立した時期の天皇。",
+ events:"養老律令・藤原不比等",
+ exam:"養老律令＝元正天皇の時代。"
+},
+
+{
+ id:15,name:"聖武天皇",reading:"しょうむてんのう",era:"古代",category:"天皇・皇族",importance:"S",
+ role:"第45代天皇",
+ point:"国分寺・国分尼寺を建立し、東大寺盧舎那仏を造立した。仏教による国家鎮護を進めた。",
+ events:"国分寺・国分尼寺・東大寺・大仏",
+ exam:"聖武天皇＝仏教による国家鎮護。"
+},
+
+{
+ id:16,name:"光明皇后",reading:"こうみょうこうごう",era:"古代",category:"天皇・皇族",importance:"A",
+ role:"聖武天皇の皇后",
+ point:"社会福祉的な活動を行い、皇后宮職・施薬院・悲田院などと関係する。",
+ events:"聖武天皇・施薬院・悲田院",
+ exam:"光明皇后＝慈善活動。聖武天皇の皇后。"
+},
+
+{
+ id:17,name:"鑑真",reading:"がんじん",era:"古代",category:"僧侶・宗教",importance:"S",
+ role:"唐の高僧",
+ point:"日本に渡来し、正式な戒律を伝えた。唐招提寺を開いた。",
+ events:"唐招提寺・戒律・奈良時代",
+ exam:"鑑真＝戒律＝唐招提寺。"
+},
+
+{
+ id:18,name:"行基",reading:"ぎょうき",era:"古代",category:"僧侶・宗教",importance:"A",
+ role:"奈良時代の僧",
+ point:"民衆への布教や社会事業を行い、東大寺大仏造立にも協力した。",
+ events:"行基・東大寺大仏・社会事業",
+ exam:"行基＝民衆への布教＋大仏造立への協力。"
+},
+
+{
+ id:19,name:"道鏡",reading:"どうきょう",era:"古代",category:"僧侶・宗教",importance:"A",
+ role:"奈良時代の僧",
+ point:"称徳天皇の信任を受けて政治的権力を強めた。",
+ events:"称徳天皇・宇佐八幡神託事件",
+ exam:"道鏡＝称徳天皇＝宇佐八幡神託事件。"
+},
+
+{
+ id:20,name:"桓武天皇",reading:"かんむてんのう",era:"古代",category:"天皇・皇族",importance:"S",
+ role:"第50代天皇",
+ point:"平城京から長岡京、さらに平安京へ遷都し、律令国家の立て直しを進めた。",
+ events:"長岡京・平安京・坂上田村麻呂",
+ exam:"794年平安京＝桓武天皇。"
+},
+
+{
+ id:21,name:"坂上田村麻呂",reading:"さかのうえのたむらまろ",era:"古代",category:"武将・軍人",importance:"A",
+ role:"征夷大将軍",
+ point:"東北地方への軍事遠征を行い、蝦夷政策を進めた。",
+ events:"征夷大将軍・蝦夷・胆沢城",
+ exam:"坂上田村麻呂＝征夷大将軍。"
+},
+
+{
+ id:22,name:"最澄",reading:"さいちょう",era:"古代",category:"僧侶・宗教",importance:"S",
+ role:"天台宗の開祖",
+ point:"比叡山延暦寺を拠点として天台宗を広めた。",
+ events:"天台宗・比叡山・延暦寺",
+ exam:"最澄＝天台宗。"
+},
+
+{
+ id:23,name:"空海",reading:"くうかい",era:"古代",category:"僧侶・宗教",importance:"S",
+ role:"真言宗の開祖",
+ point:"唐から密教を学び、真言宗を開いた。高野山金剛峯寺などと関係する。",
+ events:"真言宗・高野山・東寺・密教",
+ exam:"空海＝真言宗。最澄＝天台宗とセット。"
+},
+
+{
+ id:24,name:"菅原道真",reading:"すがわらのみちざね",era:"古代",category:"学者",importance:"S",
+ role:"学者・政治家",
+ point:"遣唐使の停止を建議し、藤原氏との政争に敗れて大宰府へ左遷された。",
+ events:"遣唐使停止・昌泰の変・大宰府",
+ exam:"菅原道真＝遣唐使停止建議＋大宰府。"
+},
+
+/* ===== 中世 ===== */
+
+{
+ id:25,name:"白河上皇",reading:"しらかわじょうこう",era:"中世",category:"政治家",importance:"S",
+ role:"院政の開始者",
+ point:"上皇として政治を行う院政を開始した。",
+ events:"院政・上皇・北面の武士",
+ exam:"白河上皇＝院政開始。"
+},
+
+{
+ id:26,name:"藤原道長",reading:"ふじわらのみちなが",era:"中世",category:"政治家",importance:"S",
+ role:"摂関政治の中心人物",
+ point:"摂関家の最盛期を築いた人物。娘を天皇の后とし、外戚として権力を強めた。",
+ events:"摂関政治・望月の歌・彰子",
+ exam:"藤原道長＝摂関政治の全盛。"
+},
+
+{
+ id:27,name:"藤原頼通",reading:"ふじわらのよりみち",era:"中世",category:"政治家",importance:"A",
+ role:"関白",
+ point:"道長の子。宇治に平等院鳳凰堂を建立した。",
+ events:"平等院鳳凰堂・摂関政治",
+ exam:"藤原頼通＝平等院鳳凰堂。"
+},
+
+{
+ id:28,name:"源義家",reading:"みなもとのよしいえ",era:"中世",category:"武将・軍人",importance:"A",
+ role:"武士の棟梁",
+ point:"前九年合戦・後三年合戦などを通じて武士の棟梁としての地位を高めた。",
+ events:"前九年合戦・後三年合戦・源氏",
+ exam:"源義家＝八幡太郎。武士の棟梁。"
+},
+
+{
+ id:29,name:"平清盛",reading:"たいらのきよもり",era:"中世",category:"武将・軍人",importance:"S",
+ role:"平氏政権の中心人物",
+ point:"武士として初めて太政大臣となり、日宋貿易を進めた。",
+ events:"平氏政権・日宋貿易・太政大臣",
+ exam:"平清盛＝武士初の太政大臣＋日宋貿易。"
+},
+
+{
+ id:30,name:"後白河法皇",reading:"ごしらかわほうおう",era:"中世",category:"天皇・皇族",importance:"S",
+ role:"院政の政治家",
+ point:"平氏・源氏の対立の中で政治的影響力を保った。",
+ events:"院政・源平合戦・院庁",
+ exam:"後白河法皇＝源平争乱期の院政。"
+},
+
+{
+ id:31,name:"源頼朝",reading:"みなもとのよりとも",era:"中世",category:"武将・軍人",importance:"S",
+ role:"鎌倉幕府初代将軍",
+ point:"東国武士を組織して平氏を滅ぼし、鎌倉を中心とした武家政権を成立させた。",
+ events:"鎌倉幕府・守護・地頭・征夷大将軍",
+ exam:"源頼朝＝鎌倉幕府。守護・地頭。"
+},
+
+{
+ id:32,name:"源義経",reading:"みなもとのよしつね",era:"中世",category:"武将・軍人",importance:"S",
+ role:"源氏の武将",
+ point:"一ノ谷・屋島・壇ノ浦で平氏を破ったが、頼朝と対立して追われた。",
+ events:"一ノ谷・屋島・壇ノ浦・奥州",
+ exam:"源義経＝壇ノ浦。頼朝との対立。"
+},
+
+{
+ id:33,name:"北条時政",reading:"ほうじょうときまさ",era:"中世",category:"政治家",importance:"A",
+ role:"初代執権",
+ point:"頼朝の義父。鎌倉幕府で執権となり、北条氏の政治的基盤を築いた。",
+ events:"執権・北条氏・牧氏事件",
+ exam:"北条時政＝初代執権。"
+},
+
+{
+ id:34,name:"北条泰時",reading:"ほうじょうやすとき",era:"中世",category:"政治家",importance:"S",
+ role:"鎌倉幕府第三代執権",
+ point:"評定衆を設置し、1232年に御成敗式目を制定した。",
+ events:"御成敗式目・評定衆・執権政治",
+ exam:"北条泰時＝1232年御成敗式目。"
+},
+
+{
+ id:35,name:"北条時宗",reading:"ほうじょうときむね",era:"中世",category:"政治家",importance:"S",
+ role:"鎌倉幕府第8代執権",
+ point:"元寇の際に幕府の指導者として対応した。",
+ events:"文永の役・弘安の役・元寇",
+ exam:"北条時宗＝元寇。"
+},
+
+{
+ id:36,name:"日蓮",reading:"にちれん",era:"中世",category:"僧侶・宗教",importance:"A",
+ role:"日蓮宗の開祖",
+ point:"法華経を重視し、『立正安国論』を著した。",
+ events:"日蓮宗・立正安国論",
+ exam:"日蓮＝日蓮宗＝法華経。"
+},
+
+{
+ id:37,name:"法然",reading:"ほうねん",era:"中世",category:"僧侶・宗教",importance:"S",
+ role:"浄土宗の開祖",
+ point:"専修念仏を説き、浄土宗を開いた。",
+ events:"浄土宗・専修念仏",
+ exam:"法然＝浄土宗。"
+},
+
+{
+ id:38,name:"親鸞",reading:"しんらん",era:"中世",category:"僧侶・宗教",importance:"S",
+ role:"浄土真宗の祖",
+ point:"法然の弟子。阿弥陀仏の本願による救済を説いた。",
+ events:"浄土真宗・専修念仏・悪人正機",
+ exam:"親鸞＝浄土真宗。"
+},
+
+{
+ id:39,name:"栄西",reading:"えいさい",era:"中世",category:"僧侶・宗教",importance:"A",
+ role:"臨済宗を伝えた僧",
+ point:"宋から禅宗を学び、日本に臨済宗を広めた。",
+ events:"臨済宗・建仁寺・禅",
+ exam:"栄西＝臨済宗。"
+},
+
+{
+ id:40,name:"道元",reading:"どうげん",era:"中世",category:"僧侶・宗教",importance:"A",
+ role:"曹洞宗の祖",
+ point:"中国から禅を学び、曹洞宗を広めた。",
+ events:"曹洞宗・永平寺・只管打坐",
+ exam:"道元＝曹洞宗。"
+},
+
+{
+ id:41,name:"後醍醐天皇",reading:"ごだいごてんのう",era:"中世",category:"天皇・皇族",importance:"S",
+ role:"建武の新政を行った天皇",
+ point:"鎌倉幕府を倒し、天皇中心の政治を目指した。",
+ events:"元弘の乱・建武の新政・南北朝",
+ exam:"後醍醐天皇＝鎌倉幕府滅亡＋建武の新政。"
+},
+
+{
+ id:42,name:"足利尊氏",reading:"あしかがたかうじ",era:"中世",category:"武将・軍人",importance:"S",
+ role:"室町幕府初代将軍",
+ point:"後醍醐天皇と対立し、室町幕府を開いた。",
+ events:"室町幕府・南北朝・征夷大将軍",
+ exam:"足利尊氏＝室町幕府。"
+},
+
+{
+ id:43,name:"足利義満",reading:"あしかがよしみつ",era:"中世",category:"政治家",importance:"S",
+ role:"室町幕府第3代将軍",
+ point:"南北朝を統一し、明との勘合貿易を開始した。北山文化を代表する人物。",
+ events:"南北朝統一・勘合貿易・金閣",
+ exam:"足利義満＝南北朝統一＋勘合貿易＋金閣。"
+},
+
+{
+ id:44,name:"足利義政",reading:"あしかがよしまさ",era:"中世",category:"政治家",importance:"A",
+ role:"室町幕府第8代将軍",
+ point:"応仁の乱の時期の将軍。東山文化を保護し、銀閣を建てた。",
+ events:"応仁の乱・東山文化・銀閣",
+ exam:"足利義政＝応仁の乱＋東山文化＋銀閣。"
+},
+
+{
+ id:45,name:"雪舟",reading:"せっしゅう",era:"中世",category:"文化人",importance:"S",
+ role:"水墨画家",
+ point:"明に渡って水墨画を学び、日本の水墨画を大成した。",
+ events:"水墨画・天橋立図・山水長巻",
+ exam:"雪舟＝水墨画。"
+},
+
+{
+ id:46,name:"千利休",reading:"せんのりきゅう",era:"近世",category:"文化人",importance:"S",
+ role:"茶人",
+ point:"侘茶を大成し、豊臣秀吉の茶頭として活躍した。",
+ events:"茶の湯・侘茶・千利休",
+ exam:"千利休＝侘茶。"
+},
+
+/* ===== 近世 ===== */
+
+{
+ id:47,name:"織田信長",reading:"おだのぶなが",era:"近世",category:"武将・軍人",importance:"S",
+ role:"戦国大名",
+ point:"桶狭間の戦い、長篠の戦いなどを経て勢力を拡大。室町幕府を滅ぼした。",
+ events:"桶狭間・長篠・楽市楽座・本能寺",
+ exam:"織田信長＝室町幕府滅亡＋楽市楽座＋本能寺。"
+},
+
+{
+ id:48,name:"豊臣秀吉",reading:"とよとみひでよし",era:"近世",category:"武将・軍人",importance:"S",
+ role:"天下統一を達成した武将",
+ point:"信長の後継者として全国統一を達成。太閤検地や刀狩を行った。",
+ events:"天下統一・太閤検地・刀狩・朝鮮出兵",
+ exam:"秀吉＝天下統一＋太閤検地＋刀狩。"
+},
+
+{
+ id:49,name:"徳川家康",reading:"とくがわいえやす",era:"近世",category:"武将・軍人",importance:"S",
+ role:"江戸幕府初代将軍",
+ point:"関ヶ原の戦いに勝利し、1603年に征夷大将軍となった。",
+ events:"関ヶ原・江戸幕府・征夷大将軍",
+ exam:"徳川家康＝関ヶ原→江戸幕府。"
+},
+
+{
+ id:50,name:"徳川秀忠",reading:"とくがわひでただ",era:"近世",category:"政治家",importance:"A",
+ role:"江戸幕府第2代将軍",
+ point:"大坂の陣などを経て幕府の基盤を固め、武家諸法度を整備した。",
+ events:"大坂の陣・武家諸法度",
+ exam:"秀忠＝2代将軍。"
+},
+
+{
+ id:51,name:"徳川家光",reading:"とくがわいえみつ",era:"近世",category:"政治家",importance:"S",
+ role:"江戸幕府第3代将軍",
+ point:"参勤交代を制度化し、幕藩体制を安定させた。",
+ events:"参勤交代・武家諸法度・鎖国",
+ exam:"家光＝参勤交代の制度化。"
+},
+
+{
+ id:52,name:"徳川綱吉",reading:"とくがわつなよし",era:"近世",category:"政治家",importance:"A",
+ role:"江戸幕府第5代将軍",
+ point:"生類憐みの令で知られ、元禄文化が栄えた時代の将軍。",
+ events:"生類憐みの令・元禄文化・柳沢吉保",
+ exam:"徳川綱吉＝生類憐みの令＋元禄文化。"
+},
+
+{
+ id:53,name:"徳川吉宗",reading:"とくがわよしむね",era:"近世",category:"政治家",importance:"S",
+ role:"江戸幕府第8代将軍",
+ point:"享保の改革を実施。目安箱、公事方御定書、新田開発などを進めた。",
+ events:"享保の改革・目安箱・公事方御定書",
+ exam:"吉宗＝享保の改革。"
+},
+
+{
+ id:54,name:"田沼意次",reading:"たぬまおきつぐ",era:"近世",category:"政治家",importance:"S",
+ role:"江戸幕府の老中",
+ point:"商業を重視し、株仲間を奨励するなど重商主義的政策を進めた。",
+ events:"田沼政治・株仲間・印旛沼干拓",
+ exam:"田沼意次＝商業重視＋株仲間。"
+},
+
+{
+ id:55,name:"松平定信",reading:"まつだいらさだのぶ",era:"近世",category:"政治家",importance:"S",
+ role:"寛政の改革を行った老中",
+ point:"倹約令、囲米、旧里帰農令などを進めた。",
+ events:"寛政の改革・寛政異学の禁",
+ exam:"松平定信＝寛政の改革。"
+},
+
+{
+ id:56,name:"水野忠邦",reading:"みずのただくに",era:"近世",category:"政治家",importance:"S",
+ role:"天保の改革を行った老中",
+ point:"天保の改革を実施し、株仲間解散令や上知令などを行った。",
+ events:"天保の改革・株仲間解散令・上知令",
+ exam:"水野忠邦＝天保の改革。"
+},
+
+{
+ id:57,name:"伊能忠敬",reading:"いのうただたか",era:"近世",category:"学者",importance:"S",
+ role:"測量家",
+ point:"全国を測量し、精密な日本地図を作成した。",
+ events:"伊能図・全国測量",
+ exam:"伊能忠敬＝日本全国測量＋伊能図。"
+},
+
+{
+ id:58,name:"本居宣長",reading:"もとおりのりなが",era:"近世",category:"学者",importance:"S",
+ role:"国学者",
+ point:"『古事記伝』を著し、古典研究を通じて国学を大成した。",
+ events:"国学・古事記伝・もののあはれ",
+ exam:"本居宣長＝国学＝古事記伝。"
+},
+
+{
+ id:59,name:"杉田玄白",reading:"すぎたげんぱく",era:"近世",category:"学者",importance:"S",
+ role:"蘭学者・医師",
+ point:"『解体新書』の翻訳に関わり、日本の蘭学発展に貢献した。",
+ events:"解体新書・蘭学・前野良沢",
+ exam:"杉田玄白＝解体新書。"
+},
+
+{
+ id:60,name:"緒方洪庵",reading:"おがたこうあん",era:"近世",category:"学者",importance:"A",
+ role:"蘭学者・医師",
+ point:"適塾を開き、多くの幕末・明治期の人材を育てた。",
+ events:"適塾・蘭学・福沢諭吉",
+ exam:"緒方洪庵＝適塾。"
+},
+
+{
+ id:61,name:"葛飾北斎",reading:"かつしかほくさい",era:"近世",category:"文化人",importance:"S",
+ role:"浮世絵師",
+ point:"『富嶽三十六景』などで知られる江戸後期の浮世絵師。",
+ events:"富嶽三十六景・浮世絵",
+ exam:"葛飾北斎＝富嶽三十六景。"
+},
+
+{
+ id:62,name:"歌川広重",reading:"うたがわひろしげ",era:"近世",category:"文化人",importance:"A",
+ role:"浮世絵師",
+ point:"名所絵を得意とし、『東海道五十三次』などを制作した。",
+ events:"東海道五十三次・浮世絵",
+ exam:"歌川広重＝東海道五十三次。"
+},
+
+{
+ id:63,name:"松尾芭蕉",reading:"まつおばしょう",era:"近世",category:"文化人",importance:"S",
+ role:"俳諧師",
+ point:"俳諧を文学として高め、『おくのほそ道』などを残した。",
+ events:"俳諧・おくのほそ道・奥の細道",
+ exam:"松尾芭蕉＝俳諧＋おくのほそ道。"
+},
+
+{
+ id:64,name:"井原西鶴",reading:"いはらさいかく",era:"近世",category:"文化人",importance:"A",
+ role:"浮世草子の作家",
+ point:"町人社会を題材にした浮世草子を多く著した。",
+ events:"浮世草子・好色一代男・元禄文化",
+ exam:"井原西鶴＝浮世草子。"
+},
+
+{
+ id:65,name:"近松門左衛門",reading:"ちかまつもんざえもん",era:"近世",category:"文化人",importance:"A",
+ role:"人形浄瑠璃・歌舞伎の劇作家",
+ point:"町人社会を題材とした作品を多数制作した。",
+ events:"人形浄瑠璃・曽根崎心中・元禄文化",
+ exam:"近松門左衛門＝人形浄瑠璃。"
+},
+
+{
+ id:66,name:"吉田松陰",reading:"よしだしょういん",era:"近世",category:"思想家",importance:"S",
+ role:"幕末の思想家・教育者",
+ point:"松下村塾で高杉晋作や伊藤博文らを育て、尊王攘夷思想に影響を与えた。",
+ events:"松下村塾・尊王攘夷・長州",
+ exam:"吉田松陰＝松下村塾。"
+},
+
+{
+ id:67,name:"坂本龍馬",reading:"さかもとりょうま",era:"近世",category:"政治家",importance:"S",
+ role:"幕末の志士",
+ point:"薩長同盟や大政奉還に関わった幕末の活動家。",
+ events:"薩長同盟・船中八策・大政奉還",
+ exam:"坂本龍馬＝薩長同盟＋大政奉還への動き。"
+},
+
+{
+ id:68,name:"西郷隆盛",reading:"さいごうたかもり",era:"近世",category:"政治家",importance:"S",
+ role:"維新三傑",
+ point:"薩摩藩の中心人物として倒幕運動を進め、明治政府でも活躍した。",
+ events:"薩長同盟・王政復古・西南戦争",
+ exam:"西郷隆盛＝維新三傑＋西南戦争。"
+},
+
+{
+ id:69,name:"大久保利通",reading:"おおくぼとしみち",era:"近世",category:"政治家",importance:"S",
+ role:"維新三傑・明治政府の政治家",
+ point:"廃藩置県や殖産興業など、近代国家形成を主導した。",
+ events:"廃藩置県・殖産興業・内務省",
+ exam:"大久保利通＝明治国家建設。"
+},
+
+{
+ id:70,name:"木戸孝允",reading:"きどたかよし",era:"近世",category:"政治家",importance:"S",
+ role:"維新三傑",
+ point:"長州藩の指導者。薩長同盟や五箇条の御誓文などに関わった。",
+ events:"薩長同盟・五箇条の御誓文・維新三傑",
+ exam:"木戸孝允＝長州＋維新三傑。"
+},
+
+/* ===== 近代 ===== */
+
+{
+ id:71,name:"明治天皇",reading:"めいじてんのう",era:"近代",category:"天皇・皇族",importance:"S",
+ role:"第122代天皇",
+ point:"明治維新から近代国家形成の時代の天皇。大日本帝国憲法発布などの時期に在位。",
+ events:"五箇条の御誓文・大日本帝国憲法・日清戦争・日露戦争",
+ exam:"明治天皇＝明治国家形成の時代。"
+},
+
+{
+ id:72,name:"伊藤博文",reading:"いとうひろぶみ",era:"近代",category:"政治家",importance:"S",
+ role:"初代内閣総理大臣",
+ point:"明治政府の中心人物。大日本帝国憲法の制定に深く関わった。",
+ events:"内閣制度・大日本帝国憲法・初代首相",
+ exam:"伊藤博文＝初代首相＋大日本帝国憲法。"
+},
+
+{
+ id:73,name:"板垣退助",reading:"いたがきたいすけ",era:"近代",category:"政治家",importance:"S",
+ role:"自由民権運動の指導者",
+ point:"自由民権運動を指導し、自由党を結成した。",
+ events:"民撰議院設立建白書・自由党・自由民権運動",
+ exam:"板垣退助＝自由民権運動＝自由党。"
+},
+
+{
+ id:74,name:"大隈重信",reading:"おおくましげのぶ",era:"近代",category:"政治家",importance:"S",
+ role:"政治家・早稲田大学創立者",
+ point:"立憲改進党を結成し、後に内閣総理大臣も務めた。",
+ events:"立憲改進党・隈板内閣・早稲田大学",
+ exam:"大隈重信＝立憲改進党＋早稲田大学。"
+},
+
+{
+ id:75,name:"山県有朋",reading:"やまがたありとも",era:"近代",category:"政治家",importance:"S",
+ role:"陸軍・軍部の指導者",
+ point:"徴兵制による近代的軍隊の整備や軍部の基盤形成に大きな影響を与えた。",
+ events:"徴兵令・陸軍・軍部大臣現役武官制",
+ exam:"山県有朋＝陸軍＋軍部政治。"
+},
+
+{
+ id:76,name:"小村寿太郎",reading:"こむらじゅたろう",era:"近代",category:"政治家",importance:"S",
+ role:"外交官・外務大臣",
+ point:"日露戦争後のポーツマス条約や関税自主権回復交渉に関わった。",
+ events:"ポーツマス条約・日英同盟・関税自主権",
+ exam:"小村寿太郎＝ポーツマス条約＋関税自主権回復。"
+},
+
+{
+ id:77,name:"原敬",reading:"はらたかし",era:"近代",category:"政治家",importance:"S",
+ role:"政党政治家・首相",
+ point:"本格的な政党内閣を組織し、平民宰相と呼ばれた。",
+ events:"政党内閣・立憲政友会・米騒動",
+ exam:"原敬＝本格的政党内閣。"
+},
+
+{
+ id:78,name:"加藤高明",reading:"かとうたかあき",era:"近代",category:"政治家",importance:"S",
+ role:"首相・護憲運動の政治家",
+ point:"1925年に普通選挙法を成立させた一方、同年に治安維持法も制定された。",
+ events:"普通選挙法・治安維持法・憲政会",
+ exam:"1925年＝普通選挙法＋治安維持法。"
+},
+
+{
+ id:79,name:"犬養毅",reading:"いぬかいつよし",era:"近代",category:"政治家",importance:"A",
+ role:"政党政治家・首相",
+ point:"立憲政友会の総裁。五・一五事件で暗殺された。",
+ events:"立憲政友会・五・一五事件",
+ exam:"犬養毅＝五・一五事件。"
+},
+
+{
+ id:80,name:"近衛文麿",reading:"このえふみまろ",era:"近代",category:"政治家",importance:"S",
+ role:"昭和期の首相",
+ point:"日中戦争期から太平洋戦争開戦前にかけて首相を務めた。",
+ events:"第一次近衛内閣・国家総動員法・大政翼賛会",
+ exam:"近衛文麿＝日中戦争期＋大政翼賛会。"
+},
+
+{
+ id:81,name:"東条英機",reading:"とうじょうひでき",era:"近代",category:"政治家",importance:"S",
+ role:"太平洋戦争期の首相",
+ point:"1941年に首相となり、太平洋戦争開戦期の日本政府を率いた。",
+ events:"太平洋戦争・東条内閣・戦時体制",
+ exam:"東条英機＝太平洋戦争開戦期の首相。"
+},
+
+{
+ id:82,name:"昭和天皇",reading:"しょうわてんのう",era:"近代",category:"天皇・皇族",importance:"S",
+ role:"第124代天皇",
+ point:"1926年から1989年まで在位。戦前・戦中・戦後の日本を象徴する存在。",
+ events:"太平洋戦争・終戦・日本国憲法",
+ exam:"昭和天皇＝戦前・戦中・戦後を通じて在位。"
+},
+
+{
+ id:83,name:"津田梅子",reading:"つだうめこ",era:"近代",category:"学者",importance:"A",
+ role:"女子教育者",
+ point:"女子教育の発展に尽力し、津田塾大学の前身を創設した。",
+ events:"女子教育・津田塾大学・女子英学塾",
+ exam:"津田梅子＝女子教育。"
+},
+
+{
+ id:84,name:"福沢諭吉",reading:"ふくざわゆきち",era:"近代",category:"思想家",importance:"S",
+ role:"啓蒙思想家・教育者",
+ point:"『学問のすゝめ』などを著し、慶應義塾を創設した。",
+ events:"学問のすゝめ・文明開化・慶應義塾",
+ exam:"福沢諭吉＝学問のすゝめ＋慶應義塾。"
+},
+
+{
+ id:85,name:"中江兆民",reading:"なかえちょうみん",era:"近代",category:"思想家",importance:"A",
+ role:"自由民権思想家",
+ point:"ルソーの思想を紹介し、自由民権運動に影響を与えた。",
+ events:"東洋のルソー・自由民権運動・ルソー",
+ exam:"中江兆民＝ルソー思想＋自由民権運動。"
+},
+
+{
+ id:86,name:"内村鑑三",reading:"うちむらかんぞう",era:"近代",category:"思想家",importance:"A",
+ role:"キリスト教思想家",
+ point:"キリスト教信仰と日本人としての倫理を結びつけて考えた思想家。",
+ events:"不敬事件・無教会主義・キリスト教",
+ exam:"内村鑑三＝不敬事件＋無教会主義。"
+},
+
+{
+ id:87,name:"夏目漱石",reading:"なつめそうせき",era:"近代",category:"文化人",importance:"S",
+ role:"小説家",
+ point:"『吾輩は猫である』『坊っちゃん』『こころ』などで知られる近代文学の代表的人物。",
+ events:"明治文学・吾輩は猫である・こころ",
+ exam:"夏目漱石＝近代文学。"
+},
+
+{
+ id:88,name:"森鴎外",reading:"もりおうがい",era:"近代",category:"文化人",importance:"A",
+ role:"小説家・軍医",
+ point:"軍医として活動する一方、近代文学を代表する作品を残した。",
+ events:"舞姫・高瀬舟・軍医",
+ exam:"森鴎外＝舞姫＋軍医。"
+},
+
+{
+ id:89,name:"与謝野晶子",reading:"よさのあきこ",era:"近代",category:"文化人",importance:"A",
+ role:"歌人・作家",
+ point:"『みだれ髪』などで知られる歌人。反戦的な作品でも知られる。",
+ events:"みだれ髪・明星・日露戦争",
+ exam:"与謝野晶子＝みだれ髪。"
+},
+
+{
+ id:90,name:"石川啄木",reading:"いしかわたくぼく",era:"近代",category:"文化人",importance:"A",
+ role:"歌人・詩人",
+ point:"『一握の砂』『悲しき玩具』などを残した。",
+ events:"一握の砂・悲しき玩具",
+ exam:"石川啄木＝一握の砂。"
+},
+
+/* ===== 現代 ===== */
+
+{
+ id:91,name:"吉田茂",reading:"よしだしげる",era:"現代",category:"政治家",importance:"S",
+ role:"戦後の首相",
+ point:"サンフランシスコ平和条約と日米安全保障条約の締結を進め、戦後日本の外交路線を形成した。",
+ events:"サンフランシスコ平和条約・日米安全保障条約・吉田ドクトリン",
+ exam:"吉田茂＝講和＋日米安保。"
+},
+
+{
+ id:92,name:"鳩山一郎",reading:"はとやまいちろう",era:"現代",category:"政治家",importance:"A",
+ role:"戦後の首相",
+ point:"1956年の日ソ共同宣言を実現し、日本の国際連合加盟につなげた。",
+ events:"日ソ共同宣言・国際連合加盟",
+ exam:"鳩山一郎＝日ソ共同宣言＝国連加盟。"
+},
+
+{
+ id:93,name:"池田勇人",reading:"いけだはやと",era:"現代",category:"政治家",importance:"S",
+ role:"高度経済成長期の首相",
+ point:"所得倍増計画を掲げ、高度経済成長を推進した。",
+ events:"所得倍増計画・高度経済成長",
+ exam:"池田勇人＝所得倍増計画。"
+},
+
+{
+ id:94,name:"佐藤栄作",reading:"さとうえいさく",era:"現代",category:"政治家",importance:"S",
+ role:"戦後の首相",
+ point:"非核三原則を掲げ、沖縄返還を実現した。ノーベル平和賞を受賞した。",
+ events:"非核三原則・沖縄返還・ノーベル平和賞",
+ exam:"佐藤栄作＝非核三原則＋沖縄返還。"
+},
+
+{
+ id:95,name:"田中角栄",reading:"たなかかくえい",era:"現代",category:"政治家",importance:"S",
+ role:"戦後の首相",
+ point:"日中国交正常化を実現し、日本列島改造論を掲げた。",
+ events:"日中国交正常化・日本列島改造論・1972年",
+ exam:"田中角栄＝日中国交正常化。"
+},
+
+{
+ id:96,name:"中曽根康弘",reading:"なかそねやすひろ",era:"現代",category:"政治家",importance:"A",
+ role:"戦後の首相",
+ point:"国鉄・電電公社・専売公社の民営化を進めた。",
+ events:"国鉄民営化・電電公社・専売公社",
+ exam:"中曽根康弘＝三公社民営化。"
+},
+
+{
+ id:97,name:"マッカーサー",reading:"Douglas MacArthur",era:"現代",category:"外国人",importance:"S",
+ role:"GHQ最高司令官",
+ point:"第二次世界大戦後、日本の占領政策を指揮し、民主化・非軍事化を進めた。",
+ events:"GHQ・農地改革・財閥解体・日本国憲法",
+ exam:"マッカーサー＝GHQ＋戦後改革。"
+},
+
+{
+ id:98,name:"渋沢栄一",reading:"しぶさわえいいち",era:"近代",category:"政治家",importance:"A",
+ role:"実業家・近代経済人",
+ point:"多くの企業や社会事業の設立に関わり、日本の近代的な企業活動の発展に貢献した。",
+ events:"第一国立銀行・近代産業・新一万円札",
+ exam:"渋沢栄一＝近代日本の企業・経済発展。"
+},
+
+{
+ id:99,name:"北里柴三郎",reading:"きたさとしばさぶろう",era:"近代",category:"学者",importance:"A",
+ role:"医学者・細菌学者",
+ point:"破傷風菌の研究や血清療法の発展に貢献した。2024年発行の新千円札の肖像。",
+ events:"細菌学・血清療法・新千円札",
+ exam:"北里柴三郎＝細菌学＋血清療法。"
+},
+
+{
+ id:100,name:"津田梅子",reading:"つだうめこ",era:"近代",category:"学者",importance:"A",
+ role:"女子教育者",
+ point:"女子教育の発展に尽力し、女子英学塾を創設した。2024年発行の新五千円札の肖像。",
+ events:"女子英学塾・女子教育・新五千円札",
+ exam:"津田梅子＝女子教育＋津田塾。"
+}
+
+];
+
+/*
+=========================================================
+ NOTE
+ ID 83 と ID 100 は同一人物になっている。
+ 100人版では人物の重複を避けるため、
+ ID 100を「津田梅子」ではなく別人物に差し替える。
+=========================================================
+*/
+
+peopleData[99]={
+ id:100,
+ name:"田中正造",
+ reading:"たなかしょうぞう",
+ era:"近代",
+ category:"政治家",
+ importance:"A",
+ role:"政治家・公害問題の先駆者",
+ point:"足尾銅山鉱毒事件の被害救済を国会で訴え、明治期の公害問題を象徴する人物。",
+ events:"足尾銅山鉱毒事件・公害問題・衆議院",
+ exam:"田中正造＝足尾銅山鉱毒事件。"
+};
+
+
+/* ======================================================
+   DOM
+====================================================== */
+
+const grid=document.getElementById("grid");
+const search=document.getElementById("search");
+const era=document.getElementById("era");
+const category=document.getElementById("category");
+const importance=document.getElementById("importance");
+
+document.getElementById("total").textContent=peopleData.length;
+
+
+/* ======================================================
+   HTMLエスケープ
+====================================================== */
+
+function escapeHTML(str){
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* ======================================================
+   フィルター
+====================================================== */
+
+function getFiltered(){
+
+  const q=search.value.trim().toLowerCase();
+  const e=era.value;
+  const c=category.value;
+  const i=importance.value;
+
+  return peopleData.filter(p=>{
+
+    const text=[
+      p.name,
+      p.reading,
+      p.era,
+      p.category,
+      p.role,
+      p.point,
+      p.events,
+      p.exam
+    ].join(" ").toLowerCase();
+
+    if(q && !text.includes(q)) return false;
+    if(e && p.era!==e) return false;
+    if(c && p.category!==c) return false;
+    if(i && p.importance!==i) return false;
+
+    return true;
+  });
+}
+
+
+/* ======================================================
+   描画
+====================================================== */
+
+function render(){
+
+  const list=getFiltered();
+
+  document.getElementById("shown").textContent=list.length;
+
+  const old=list.filter(p=>p.era==="古代"||p.era==="中世").length;
+  const newer=list.filter(p=>p.era==="近世"||p.era==="近代"||p.era==="現代").length;
+
+  document.getElementById("oldCount").textContent=old;
+  document.getElementById("newCount").textContent=newer;
+
+  if(!list.length){
+    grid.innerHTML='<div class="empty">該当する人物が見つかりません。</div>';
+    return;
+  }
+
+  grid.innerHTML=list.map(p=>`
+
+    <article class="card" onclick="openModal(${p.id})">
+
+      <div class="badges">
+        <span class="badge">${escapeHTML(p.era)}</span>
+        <span class="badge">${escapeHTML(p.category)}</span>
+        <span class="badge rank">${escapeHTML(p.importance)}</span>
+      </div>
+
+      <h2>${escapeHTML(p.name)}</h2>
+
+      <div class="reading">
+        ${escapeHTML(p.reading)}
+      </div>
+
+      <div class="role">
+        ${escapeHTML(p.role)}
+      </div>
+
+      <p>
+        ${escapeHTML(p.point)}
+      </p>
+
+    </article>
+
+  `).join("");
+}
+
+
+/* ======================================================
+   モーダル
+====================================================== */
+
+function openModal(id){
+
+  const p=peopleData.find(x=>x.id===id);
+
+  if(!p) return;
+
+  document.getElementById("mEra").textContent=p.era;
+  document.getElementById("mCategory").textContent=p.category;
+  document.getElementById("mImportance").textContent=p.importance+"ランク";
+
+  document.getElementById("mName").textContent=p.name;
+  document.getElementById("mReading").textContent=p.reading;
+  document.getElementById("mRole").textContent=p.role;
+  document.getElementById("mPoint").textContent=p.point;
+  document.getElementById("mEvents").textContent=p.events;
+  document.getElementById("mExam").textContent=p.exam;
+
+  document.getElementById("modal").classList.add("show");
+
+  document.body.style.overflow="hidden";
+}
+
+function closeModal(){
+
+  document.getElementById("modal").classList.remove("show");
+
+  document.body.style.overflow="";
+}
+
+
+/* ======================================================
+   イベント
+====================================================== */
+
+search.addEventListener("input",render);
+era.addEventListener("change",render);
+category.addEventListener("change",render);
+importance.addEventListener("change",render);
+
+document.getElementById("modal").addEventListener("click",e=>{
+  if(e.target.id==="modal") closeModal();
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape") closeModal();
+});
+
+
+/* ======================================================
+   初期表示
+====================================================== */
+
+render();
+
+</script>
+
+</body>
+</html>
