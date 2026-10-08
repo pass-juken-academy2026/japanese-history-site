@@ -1,0 +1,2347 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本史 MOCK EXAM</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --bg:#080b12;
+  --panel:#101621;
+  --panel2:#141c29;
+  --line:#263246;
+  --text:#e8eef7;
+  --sub:#91a0b7;
+  --cyan:#52e0e0;
+  --blue:#5ca8ff;
+  --purple:#a982ff;
+  --green:#62df9b;
+  --orange:#ffb45c;
+  --red:#ff6f7d;
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 0%,rgba(82,224,224,.08),transparent 30%),
+    radial-gradient(circle at 90% 10%,rgba(169,130,255,.08),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Noto Sans JP",
+    "Yu Gothic",
+    sans-serif;
+}
+
+button,
+select{
+  font:inherit;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(8,11,18,.9);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--line);
+}
+
+.header-inner{
+  max-width:1150px;
+  margin:auto;
+  padding:17px 22px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.logo{
+  color:var(--cyan);
+  font-weight:900;
+  font-size:19px;
+  letter-spacing:.08em;
+}
+
+.logo span{
+  color:#fff;
+}
+
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.nav a{
+  color:var(--sub);
+  text-decoration:none;
+  padding:8px 10px;
+  border-radius:8px;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:var(--panel2);
+}
+
+.nav a.active{
+  color:var(--cyan);
+  background:rgba(82,224,224,.1);
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  max-width:1050px;
+  margin:auto;
+  padding:50px 22px 30px;
+}
+
+.eyebrow{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.18em;
+  margin-bottom:12px;
+}
+
+h1{
+  font-size:clamp(32px,6vw,56px);
+  line-height:1.1;
+  margin-bottom:14px;
+}
+
+.hero p{
+  color:var(--sub);
+  line-height:1.8;
+}
+
+
+/* =========================
+   SETUP
+========================= */
+
+.setup{
+  max-width:1050px;
+  margin:auto;
+  padding:0 22px 30px;
+}
+
+.setup-box{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+}
+
+.setup-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+select{
+  width:100%;
+  padding:13px;
+  color:#fff;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:9px;
+  outline:none;
+}
+
+select:focus{
+  border-color:var(--cyan);
+}
+
+.start-btn{
+  width:100%;
+  border:0;
+  border-radius:10px;
+  padding:15px;
+  cursor:pointer;
+
+  color:#071014;
+  background:var(--cyan);
+
+  font-weight:900;
+  transition:.2s;
+}
+
+.start-btn:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.08);
+}
+
+
+/* =========================
+   EXAM
+========================= */
+
+.exam{
+  display:none;
+  max-width:900px;
+  margin:auto;
+  padding:0 22px 70px;
+}
+
+.exam.show{
+  display:block;
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.exam-top{
+  position:sticky;
+  top:75px;
+  z-index:30;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+
+  padding:13px 16px;
+  margin-bottom:18px;
+
+  background:rgba(16,22,33,.95);
+  backdrop-filter:blur(12px);
+
+  border:1px solid var(--line);
+  border-radius:11px;
+}
+
+.progress-area{
+  flex:1;
+}
+
+.progress-text{
+  color:var(--sub);
+  font-size:12px;
+  margin-bottom:6px;
+}
+
+.progress{
+  height:5px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#1b2534;
+}
+
+.progress-bar{
+  width:0%;
+  height:100%;
+  background:var(--cyan);
+  transition:.25s;
+}
+
+.timer{
+  min-width:85px;
+  text-align:center;
+  padding:9px 12px;
+
+  color:var(--orange);
+  background:rgba(255,180,92,.08);
+  border:1px solid rgba(255,180,92,.25);
+  border-radius:8px;
+
+  font-weight:900;
+}
+
+.timer.warning{
+  color:var(--red);
+  border-color:rgba(255,111,125,.35);
+  background:rgba(255,111,125,.08);
+}
+
+
+/* =========================
+   QUESTION
+========================= */
+
+.question-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.question-head{
+  padding:24px 24px 18px;
+}
+
+.question-number{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.1em;
+  margin-bottom:12px;
+}
+
+.question-category{
+  display:inline-block;
+  color:var(--sub);
+  font-size:11px;
+  padding:5px 8px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  margin-bottom:14px;
+}
+
+.question-text{
+  font-size:19px;
+  line-height:1.8;
+  font-weight:800;
+}
+
+
+/* =========================
+   SOURCE BOX
+========================= */
+
+.source{
+  margin:0 24px 20px;
+  padding:18px;
+
+  background:#0b111a;
+  border:1px solid #202d40;
+  border-radius:10px;
+
+  color:#c4cfdf;
+  line-height:1.85;
+  font-size:14px;
+}
+
+.source-title{
+  color:var(--purple);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.1em;
+  margin-bottom:8px;
+}
+
+
+/* =========================
+   OPTIONS
+========================= */
+
+.options{
+  padding:0 24px 24px;
+
+  display:grid;
+  gap:10px;
+}
+
+.option{
+  position:relative;
+
+  width:100%;
+  padding:15px 16px;
+
+  text-align:left;
+
+  color:#dce5f1;
+  background:var(--panel2);
+
+  border:1px solid var(--line);
+  border-radius:10px;
+
+  cursor:pointer;
+  transition:.2s;
+}
+
+.option:hover:not(:disabled){
+  border-color:#48607d;
+  background:#182232;
+}
+
+.option.selected{
+  border-color:var(--cyan);
+  background:rgba(82,224,224,.08);
+}
+
+.option.correct{
+  border-color:var(--green);
+  background:rgba(98,223,155,.1);
+}
+
+.option.wrong{
+  border-color:var(--red);
+  background:rgba(255,111,125,.1);
+}
+
+.option:disabled{
+  cursor:default;
+}
+
+.option-letter{
+  display:inline-flex;
+  width:28px;
+  height:28px;
+  align-items:center;
+  justify-content:center;
+
+  margin-right:10px;
+
+  border-radius:7px;
+  background:#0b111a;
+  border:1px solid var(--line);
+
+  color:var(--sub);
+  font-weight:900;
+}
+
+
+/* =========================
+   NEXT
+========================= */
+
+.action{
+  padding:0 24px 24px;
+}
+
+.next-btn{
+  width:100%;
+  padding:14px;
+
+  color:#071014;
+  background:var(--cyan);
+
+  border:0;
+  border-radius:9px;
+
+  font-weight:900;
+  cursor:pointer;
+}
+
+.next-btn:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+}
+
+
+/* =========================
+   EXPLANATION
+========================= */
+
+.explanation{
+  display:none;
+
+  margin:0 24px 20px;
+  padding:18px;
+
+  border-radius:10px;
+
+  background:rgba(169,130,255,.06);
+  border:1px solid rgba(169,130,255,.25);
+}
+
+.explanation.show{
+  display:block;
+}
+
+.explanation-title{
+  color:var(--purple);
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.explanation-text{
+  color:#cbd5e4;
+  line-height:1.8;
+  font-size:13px;
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+.result{
+  display:none;
+  max-width:900px;
+  margin:auto;
+  padding:0 22px 70px;
+}
+
+.result.show{
+  display:block;
+}
+
+.result-box{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:28px;
+  text-align:center;
+}
+
+.result-title{
+  color:var(--cyan);
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.15em;
+  margin-bottom:12px;
+}
+
+.score{
+  font-size:58px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.score-sub{
+  color:var(--sub);
+  margin-bottom:25px;
+}
+
+.result-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:25px;
+}
+
+.result-stat{
+  padding:16px;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+
+.result-stat strong{
+  display:block;
+  font-size:24px;
+  color:var(--cyan);
+  margin-bottom:5px;
+}
+
+.result-stat span{
+  color:var(--sub);
+  font-size:11px;
+}
+
+.section-result{
+  text-align:left;
+  border-top:1px solid var(--line);
+  padding-top:20px;
+  margin-top:20px;
+}
+
+.section-result h3{
+  font-size:14px;
+  margin-bottom:13px;
+}
+
+.section-row{
+  margin-bottom:13px;
+}
+
+.section-row-top{
+  display:flex;
+  justify-content:space-between;
+  color:var(--sub);
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+.section-bar{
+  height:6px;
+  background:#1b2534;
+  border-radius:999px;
+  overflow:hidden;
+}
+
+.section-fill{
+  height:100%;
+  background:var(--cyan);
+}
+
+.retry{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:9px;
+
+  color:#071014;
+  background:var(--cyan);
+
+  font-weight:900;
+  cursor:pointer;
+
+  margin-top:24px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+  border-top:1px solid var(--line);
+  color:var(--sub);
+  text-align:center;
+  padding:30px 20px;
+  font-size:12px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:750px){
+
+  .header-inner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .setup-grid{
+    grid-template-columns:1fr;
+  }
+
+  .exam-top{
+    top:125px;
+  }
+
+  .result-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:550px){
+
+  .hero,
+  .setup,
+  .exam,
+  .result{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .question-head{
+    padding:20px 17px 15px;
+  }
+
+  .question-text{
+    font-size:17px;
+  }
+
+  .source,
+  .options,
+  .action{
+    margin-left:17px;
+    margin-right:17px;
+    padding-left:0;
+    padding-right:0;
+  }
+
+  .source{
+    padding:15px;
+  }
+
+  .exam-top{
+    top:125px;
+  }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<header class="header">
+
+  <div class="header-inner">
+
+    <div class="logo">
+      日本史 <span>MOCK EXAM</span>
+    </div>
+
+    <nav class="nav">
+      <a href="timeline.html">年表</a>
+      <a href="people.html">人物</a>
+      <a href="connections.html">つながり</a>
+      <a href="quiz.html">一問一答</a>
+      <a href="causes.html">因果関係</a>
+      <a href="mock-exam.html" class="active">模試</a>
+    </nav>
+
+  </div>
+
+</header>
+
+
+<section class="hero">
+
+  <div class="eyebrow">
+    JAPANESE HISTORY / MOCK EXAM
+  </div>
+
+  <h1>日本史 模擬試験</h1>
+
+  <p>
+    共通テストを意識した資料・年代・因果関係問題。
+    知識だけではなく、資料から判断する力も鍛える。
+  </p>
+
+</section>
+
+
+<section class="setup" id="setup">
+
+  <div class="setup-box">
+
+    <div class="setup-grid">
+
+      <select id="periodFilter">
+        <option value="">全時代</option>
+      </select>
+
+      <select id="countSelect">
+        <option value="10">10問</option>
+        <option value="20">20問</option>
+        <option value="30">30問</option>
+      </select>
+
+    </div>
+
+    <button
+      class="start-btn"
+      id="startBtn"
+    >
+      模試をスタート
+    </button>
+
+  </div>
+
+</section>
+
+
+<section class="exam" id="exam">
+
+  <div class="exam-top">
+
+    <div class="progress-area">
+
+      <div
+        class="progress-text"
+        id="progressText"
+      >
+        1 / 10
+      </div>
+
+      <div class="progress">
+        <div
+          class="progress-bar"
+          id="progressBar"
+        ></div>
+      </div>
+
+    </div>
+
+    <div
+      class="timer"
+      id="timer"
+    >
+      20:00
+    </div>
+
+  </div>
+
+
+  <div class="question-card">
+
+    <div class="question-head">
+
+      <div
+        class="question-number"
+        id="questionNumber"
+      >
+        QUESTION 01
+      </div>
+
+      <div
+        class="question-category"
+        id="questionCategory"
+      >
+        政治・制度
+      </div>
+
+      <div
+        class="question-text"
+        id="questionText"
+      ></div>
+
+    </div>
+
+
+    <div
+      class="source"
+      id="sourceBox"
+    >
+
+      <div class="source-title">
+        SOURCE / 資料
+      </div>
+
+      <div id="sourceText"></div>
+
+    </div>
+
+
+    <div
+      class="options"
+      id="options"
+    ></div>
+
+
+    <div
+      class="explanation"
+      id="explanation"
+    >
+
+      <div class="explanation-title">
+        EXPLANATION
+      </div>
+
+      <div
+        class="explanation-text"
+        id="explanationText"
+      ></div>
+
+    </div>
+
+
+    <div class="action">
+
+      <button
+        class="next-btn"
+        id="nextBtn"
+        disabled
+      >
+        解答する
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<section
+  class="result"
+  id="result"
+>
+
+  <div class="result-box">
+
+    <div class="result-title">
+      EXAM COMPLETE
+    </div>
+
+    <div
+      class="score"
+      id="finalScore"
+    >
+      0%
+    </div>
+
+    <div class="score-sub">
+      模試終了
+    </div>
+
+
+    <div class="result-grid">
+
+      <div class="result-stat">
+
+        <strong id="correctCount">
+          0
+        </strong>
+
+        <span>
+          正解
+        </span>
+
+      </div>
+
+
+      <div class="result-stat">
+
+        <strong id="wrongCount">
+          0
+        </strong>
+
+        <span>
+          不正解
+        </span>
+
+      </div>
+
+
+      <div class="result-stat">
+
+        <strong id="totalCount">
+          0
+        </strong>
+
+        <span>
+          問題数
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="section-result">
+
+      <h3>
+        分野別結果
+      </h3>
+
+      <div id="sectionResults"></div>
+
+    </div>
+
+
+    <button
+      class="retry"
+      id="retryBtn"
+    >
+      もう一度挑戦
+    </button>
+
+  </div>
+
+</section>
+
+
+<footer class="footer">
+  日本史 MOCK EXAM ｜ 知識・資料読解・因果関係を総合演習
+</footer>
+
+
+<script>
+
+/* =========================================================
+   MOCK EXAM DATA
+========================================================= */
+
+const mockData = [
+
+  {
+    id:1,
+    period:"古代",
+    category:"政治・制度",
+
+    question:
+      "次の出来事を古い順に並べたものとして正しいものを選べ。",
+
+    source:
+      "A：大化の改新　B：大宝律令　C：平城京遷都　D：墾田永年私財法",
+
+    options:[
+      "A → B → C → D",
+      "B → A → C → D",
+      "A → C → B → D",
+      "B → C → A → D"
+    ],
+
+    answer:0,
+
+    explanation:
+      "乙巳の変・大化の改新は7世紀中頃、大宝律令は701年、平城京遷都は710年、墾田永年私財法は743年。したがってA→B→C→D。"
+  },
+
+
+  {
+    id:2,
+    period:"古代",
+    category:"外交",
+
+    question:
+      "7世紀初頭の東アジア情勢について、最も適切なものを選べ。",
+
+    source:
+      "推古天皇の時代、日本は大陸の国家との交流を進めた。",
+
+    options:[
+      "隋へ使者を派遣し、制度や文化を学ぼうとした",
+      "元へ使者を派遣し、冊封関係を結んだ",
+      "明との勘合貿易を開始した",
+      "清と日清修好条規を結んだ"
+    ],
+
+    answer:0,
+
+    explanation:
+      "推古朝では遣隋使が派遣された。勘合貿易は室町時代、元寇は鎌倉時代、日清修好条規は明治時代。"
+  },
+
+
+  {
+    id:3,
+    period:"古代",
+    category:"土地制度",
+
+    question:
+      "墾田永年私財法が出された背景として最も適切なものを選べ。",
+
+    source:
+      "743年、新しく開墾した土地の永久私有を認める法令が出された。",
+
+    options:[
+      "口分田の不足などにより、開墾を促進する必要があった",
+      "武士の所領を没収する必要があった",
+      "大名の領地を統一する必要があった",
+      "外国との貿易を拡大する必要があった"
+    ],
+
+    answer:0,
+
+    explanation:
+      "人口増加などにより班田収授のための土地が不足し、開墾を促す目的から墾田永年私財法が出された。"
+  },
+
+
+  {
+    id:4,
+    period:"平安",
+    category:"政治",
+
+    question:
+      "藤原氏が摂関政治を行ううえで重要だった関係として正しいものを選べ。",
+
+    source:
+      "藤原氏は天皇家との関係を強めることで政治的地位を高めた。",
+
+    options:[
+      "外戚関係",
+      "御恩と奉公",
+      "参勤交代",
+      "五人組"
+    ],
+
+    answer:0,
+
+    explanation:
+      "藤原氏は娘を天皇の后にするなど外戚関係を利用して政治的権力を強めた。"
+  },
+
+
+  {
+    id:5,
+    period:"平安",
+    category:"文化",
+
+    question:
+      "国風文化が発達した時期の説明として適切なものを選べ。",
+
+    source:
+      "894年、菅原道真の建議によってある制度が停止された。",
+
+    options:[
+      "遣唐使の停止後、日本の風土に合った文化が発達した",
+      "鉄砲伝来を契機に南蛮文化が発達した",
+      "朱印船貿易によって海外文化が急速に広まった",
+      "開国後に文明開化が進んだ"
+    ],
+
+    answer:0,
+
+    explanation:
+      "遣唐使停止後、かな文字などを用いた日本独自の文化が発展し、国風文化と呼ばれる。"
+  },
+
+
+  {
+    id:6,
+    period:"鎌倉",
+    category:"政治",
+
+    question:
+      "鎌倉幕府が御家人を統制するうえで基本となった関係を表す語として正しいものを選べ。",
+
+    source:
+      "将軍と御家人の間には、土地などを媒介とした主従関係が形成された。",
+
+    options:[
+      "御恩と奉公",
+      "公地公民",
+      "富国強兵",
+      "尊王攘夷"
+    ],
+
+    answer:0,
+
+    explanation:
+      "将軍が御家人に御恩を与え、御家人が奉公する関係が鎌倉幕府の支配の基盤となった。"
+  },
+
+
+  {
+    id:7,
+    period:"鎌倉",
+    category:"外交・軍事",
+
+    question:
+      "元寇後に鎌倉幕府が抱えた問題として最も適切なものを選べ。",
+
+    source:
+      "1274年と1281年、日本は元軍の侵攻を受けた。",
+
+    options:[
+      "御家人への十分な恩賞を与えにくかった",
+      "大名の参勤交代が崩壊した",
+      "帝国議会の運営費が不足した",
+      "藩校の設置が進まなくなった"
+    ],
+
+    answer:0,
+
+    explanation:
+      "元寇では新たに獲得した土地を恩賞として分配できなかったため、御家人の不満や経済的困窮が深まった。"
+  },
+
+
+  {
+    id:8,
+    period:"室町",
+    category:"外交",
+
+    question:
+      "室町幕府が明との貿易で使用した証明書として正しいものを選べ。",
+
+    source:
+      "日本と明の間では、正式な貿易船であることを確認する仕組みが用いられた。",
+
+    options:[
+      "勘合",
+      "朱印状",
+      "五榜の掲示",
+      "版籍"
+    ],
+
+    answer:0,
+
+    explanation:
+      "日明貿易では、倭寇と正式な貿易船を区別するため勘合が使用された。"
+  },
+
+
+  {
+    id:9,
+    period:"室町",
+    category:"政治",
+
+    question:
+      "応仁の乱が起こった背景として最も適切なものを選べ。",
+
+    source:
+      "1467年、京都を中心に大規模な内乱が始まった。",
+
+    options:[
+      "将軍家の後継問題や有力守護大名の対立",
+      "黒船来航への対応をめぐる対立",
+      "朝鮮半島をめぐる日清両国の対立",
+      "米価の急騰をめぐる農民一揆"
+    ],
+
+    answer:0,
+
+    explanation:
+      "応仁の乱では将軍家の後継問題を中心に、細川・山名など有力勢力の対立が絡んだ。"
+  },
+
+
+  {
+    id:10,
+    period:"戦国",
+    category:"文化・外交",
+
+    question:
+      "1543年に日本へ伝来し、戦国大名の軍事に大きな影響を与えたものは何か。",
+
+    source:
+      "ポルトガル人を乗せた船が種子島に漂着した。",
+
+    options:[
+      "鉄砲",
+      "活版印刷術",
+      "蒸気機関",
+      "電信"
+    ],
+
+    answer:0,
+
+    explanation:
+      "1543年、種子島に鉄砲が伝来した。その後、国友などで生産され、戦国大名が積極的に利用した。"
+  },
+
+
+  {
+    id:11,
+    period:"安土桃山",
+    category:"政治",
+
+    question:
+      "豊臣秀吉が全国統一を進める過程で行った政策として適切なものを選べ。",
+
+    source:
+      "秀吉は全国の土地と人民を把握し、支配体制を整えようとした。",
+
+    options:[
+      "太閤検地",
+      "地租改正",
+      "廃藩置県",
+      "徴兵令"
+    ],
+
+    answer:0,
+
+    explanation:
+      "太閤検地は豊臣秀吉が行った土地調査。地租改正・廃藩置県・徴兵令はいずれも明治政府の政策。"
+  },
+
+
+  {
+    id:12,
+    period:"安土桃山",
+    category:"社会",
+
+    question:
+      "豊臣政権の刀狩と太閤検地が進められた結果として適切なものを選べ。",
+
+    source:
+      "豊臣政権は農民と武士の区別を明確にしようとした。",
+
+    options:[
+      "兵農分離が進んだ",
+      "摂関政治が成立した",
+      "院政が開始された",
+      "五箇条の御誓文が出された"
+    ],
+
+    answer:0,
+
+    explanation:
+      "刀狩と太閤検地は兵農分離を進め、近世の身分・支配構造形成に大きく関係した。"
+  },
+
+
+  {
+    id:13,
+    period:"江戸",
+    category:"政治",
+
+    question:
+      "江戸幕府が大名を統制するために整備した制度として正しいものを選べ。",
+
+    source:
+      "大名が一定期間ごとに江戸と領地を往復する制度が整えられた。",
+
+    options:[
+      "参勤交代",
+      "班田収授",
+      "惣無事令",
+      "五榜の掲示"
+    ],
+
+    answer:0,
+
+    explanation:
+      "参勤交代は大名を江戸と領地の間で往復させることで、幕府の大名統制に利用された。"
+  },
+
+
+  {
+    id:14,
+    period:"江戸",
+    category:"外交",
+
+    question:
+      "江戸時代の対外関係について正しいものを選べ。",
+
+    source:
+      "幕府は海外との交流を制限したが、完全に外国との関係を断ったわけではなかった。",
+
+    options:[
+      "長崎・対馬・薩摩・松前などを通じて交流が続いた",
+      "すべての外国人の来日と交易を禁止した",
+      "明との国交だけを維持した",
+      "海外への渡航を全国民に自由化した"
+    ],
+
+    answer:0,
+
+    explanation:
+      "いわゆる鎖国下でも、長崎でのオランダ・中国との交易、対馬を通じた朝鮮、薩摩を通じた琉球、松前を通じた蝦夷地との関係が存在した。"
+  },
+
+
+  {
+    id:15,
+    period:"江戸",
+    category:"政治",
+
+    question:
+      "享保の改革を行った人物として正しいものを選べ。",
+
+    source:
+      "18世紀前半、幕府財政の立て直しなどを目的に改革が行われた。",
+
+    options:[
+      "徳川吉宗",
+      "松平定信",
+      "水野忠邦",
+      "田沼意次"
+    ],
+
+    answer:0,
+
+    explanation:
+      "享保の改革は徳川吉宗。寛政の改革は松平定信、天保の改革は水野忠邦。"
+  },
+
+
+  {
+    id:16,
+    period:"江戸",
+    category:"外交",
+
+    question:
+      "1853年のペリー来航が幕府に与えた影響として最も適切なものを選べ。",
+
+    source:
+      "アメリカ東インド艦隊を率いたペリーが浦賀に来航した。",
+
+    options:[
+      "幕府は対外政策の見直しを迫られた",
+      "江戸幕府が直ちに廃止された",
+      "明治憲法が公布された",
+      "日清戦争が開始された"
+    ],
+
+    answer:0,
+
+    explanation:
+      "ペリー来航を受け、幕府は翌年の日米和親条約を結ぶなど、対外政策を大きく転換した。"
+  },
+
+
+  {
+    id:17,
+    period:"幕末",
+    category:"政治",
+
+    question:
+      "大政奉還について正しい説明を選べ。",
+
+    source:
+      "1867年、徳川慶喜は朝廷に政権を返上した。",
+
+    options:[
+      "徳川慶喜が政権を朝廷へ返上した",
+      "西郷隆盛が征夷大将軍になった",
+      "明治天皇が江戸幕府を開いた",
+      "徳川家康が朝廷へ領地を返上した"
+    ],
+
+    answer:0,
+
+    explanation:
+      "1867年、15代将軍徳川慶喜が大政奉還を行った。その後、王政復古の大号令などを経て新政府が成立した。"
+  },
+
+
+  {
+    id:18,
+    period:"明治",
+    category:"政治",
+
+    question:
+      "廃藩置県の目的として最も適切なものを選べ。",
+
+    source:
+      "1871年、藩を廃止して府県を置く改革が行われた。",
+
+    options:[
+      "中央政府による全国統治を強化する",
+      "大名の自治権を拡大する",
+      "幕府を復活させる",
+      "鎖国体制を再建する"
+    ],
+
+    answer:0,
+
+    explanation:
+      "廃藩置県によって藩を廃止し、中央政府が府県を通じて全国を直接支配する中央集権化が進んだ。"
+  },
+
+
+  {
+    id:19,
+    period:"明治",
+    category:"社会",
+
+    question:
+      "地租改正の特徴として正しいものを選べ。",
+
+    source:
+      "明治政府は安定した税収を確保するため土地制度を改革した。",
+
+    options:[
+      "地価を基準として地租を金納させた",
+      "米を年貢として納める制度をそのまま維持した",
+      "大名が税を徴収した",
+      "農民の土地所有をすべて禁止した"
+    ],
+
+    answer:0,
+
+    explanation:
+      "地租改正では地券を発行し、地価を基準に土地所有者へ地租を課して金納させた。"
+  },
+
+
+  {
+    id:20,
+    period:"明治",
+    category:"外交",
+
+    question:
+      "日清戦争後の日本について正しいものを選べ。",
+
+    source:
+      "1895年、清との講和条約が結ばれた。",
+
+    options:[
+      "下関条約が結ばれた",
+      "ポーツマス条約が結ばれた",
+      "サンフランシスコ平和条約が結ばれた",
+      "日米和親条約が結ばれた"
+    ],
+
+    answer:0,
+
+    explanation:
+      "日清戦争後、1895年に下関条約が結ばれた。ポーツマス条約は日露戦争後。"
+  },
+
+
+  {
+    id:21,
+    period:"明治",
+    category:"外交",
+
+    question:
+      "日露戦争後の講和条約として正しいものを選べ。",
+
+    source:
+      "1905年、日本とロシアの間で講和が成立した。",
+
+    options:[
+      "ポーツマス条約",
+      "下関条約",
+      "日米修好通商条約",
+      "日韓基本条約"
+    ],
+
+    answer:0,
+
+    explanation:
+      "1905年の日露戦争後、アメリカの仲介でポーツマス条約が結ばれた。"
+  },
+
+
+  {
+    id:22,
+    period:"明治",
+    category:"政治",
+
+    question:
+      "帝国議会が初めて開設された年として正しいものを選べ。",
+
+    source:
+      "大日本帝国憲法の発布後、立憲政治の制度が整えられた。",
+
+    options:[
+      "1890年",
+      "1881年",
+      "1905年",
+      "1918年"
+    ],
+
+    answer:0,
+
+    explanation:
+      "大日本帝国憲法は1889年に発布され、翌1890年に帝国議会が開設された。"
+  },
+
+
+  {
+    id:23,
+    period:"大正",
+    category:"政治・社会",
+
+    question:
+      "1918年の米騒動をきっかけとして退陣した内閣として正しいものを選べ。",
+
+    source:
+      "米価の急騰を背景に全国的な民衆運動が広がった。",
+
+    options:[
+      "寺内正毅内閣",
+      "原敬内閣",
+      "桂太郎内閣",
+      "犬養毅内閣"
+    ],
+
+    answer:0,
+
+    explanation:
+      "1918年の米騒動の責任を取る形で寺内正毅内閣が退陣し、原敬が首相となった。"
+  },
+
+
+  {
+    id:24,
+    period:"大正",
+    category:"政治",
+
+    question:
+      "1925年に成立した法律の組み合わせとして正しいものを選べ。",
+
+    source:
+      "1925年、日本の政治制度・社会統制に関する重要な法律が制定された。",
+
+    options:[
+      "普通選挙法と治安維持法",
+      "徴兵令と地租改正条例",
+      "国家総動員法と治安維持法",
+      "ポツダム宣言と日本国憲法"
+    ],
+
+    answer:0,
+
+    explanation:
+      "1925年、25歳以上の男子に選挙権を認める普通選挙法と、共産主義などの運動を取り締まる治安維持法が成立した。"
+  },
+
+
+  {
+    id:25,
+    period:"昭和",
+    category:"経済",
+
+    question:
+      "世界恐慌が日本経済に与えた影響として最も適切なものを選べ。",
+
+    source:
+      "1929年、アメリカの株価暴落を契機に世界的な不況が広がった。",
+
+    options:[
+      "輸出減少や企業倒産などによって昭和恐慌が起こった",
+      "高度経済成長が始まった",
+      "バブル経済が発生した",
+      "朝鮮特需が始まった"
+    ],
+
+    answer:0,
+
+    explanation:
+      "世界恐慌は日本にも波及し、輸出の減少や企業倒産、失業増加などを伴う昭和恐慌につながった。"
+  },
+
+
+  {
+    id:26,
+    period:"昭和",
+    category:"政治・軍事",
+
+    question:
+      "満州事変後の日本の動きとして正しいものを選べ。",
+
+    source:
+      "1931年、関東軍が満州で軍事行動を開始した。",
+
+    options:[
+      "1933年に国際連盟を脱退した",
+      "1925年に普通選挙法を制定した",
+      "1945年に日独伊三国同盟を結んだ",
+      "1951年に国際連盟へ加盟した"
+    ],
+
+    answer:0,
+
+    explanation:
+      "満州事変後、日本は国際連盟から批判を受け、1933年に脱退を通告した。"
+  },
+
+
+  {
+    id:27,
+    period:"昭和",
+    category:"政治・軍事",
+
+    question:
+      "国家総動員法が制定された背景として最も適切なものを選べ。",
+
+    source:
+      "1937年、日本と中国の戦争が全面化し、戦争が長期化した。",
+
+    options:[
+      "戦争遂行のため人的・物的資源を国家が統制する必要があった",
+      "大正デモクラシーを推進する必要があった",
+      "江戸幕府の財政を再建する必要があった",
+      "明治政府の地租改正を実施する必要があった"
+    ],
+
+    answer:0,
+
+    explanation:
+      "日中戦争の長期化を背景に、政府は人的・物的資源を戦争遂行に動員するため国家総動員法を制定した。"
+  },
+
+
+  {
+    id:28,
+    period:"昭和",
+    category:"外交・軍事",
+
+    question:
+      "1941年、日本が太平洋戦争を開始する直接の契機となった出来事は何か。",
+
+    source:
+      "1941年12月、日本軍がハワイのアメリカ軍基地を攻撃した。",
+
+    options:[
+      "真珠湾攻撃",
+      "柳条湖事件",
+      "盧溝橋事件",
+      "二・二六事件"
+    ],
+
+    answer:0,
+
+    explanation:
+      "1941年12月、日本軍による真珠湾攻撃を契機にアメリカとの戦争が始まり、太平洋戦争へ拡大した。"
+  },
+
+
+  {
+    id:29,
+    period:"戦後",
+    category:"政治",
+
+    question:
+      "日本国憲法の基本原理として正しい組み合わせを選べ。",
+
+    source:
+      "1946年公布、1947年施行の日本国憲法では、戦前とは異なる政治原理が示された。",
+
+    options:[
+      "国民主権・基本的人権の尊重・平和主義",
+      "天皇主権・臣民の権利・軍国主義",
+      "藩主権・武士の特権・鎖国",
+      "摂関政治・荘園制・武家政治"
+    ],
+
+    answer:0,
+
+    explanation:
+      "日本国憲法の基本原理は国民主権、基本的人権の尊重、平和主義。"
+  },
+
+
+  {
+    id:30,
+    period:"戦後",
+    category:"経済",
+
+    question:
+      "高度経済成長を後押しした出来事として適切なものを選べ。",
+
+    source:
+      "1950年に朝鮮戦争が始まると、日本国内の企業への発注が増加した。",
+
+    options:[
+      "特需景気",
+      "昭和恐慌",
+      "天保の飢饉",
+      "松方デフレ"
+    ],
+
+    answer:0,
+
+    explanation:
+      "朝鮮戦争に伴うアメリカ軍からの発注によって特需景気が発生し、戦後日本経済の回復を後押しした。"
+  }
+
+];
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let questions = [];
+let current = 0;
+let score = 0;
+let answered = false;
+let timeLeft = 1200;
+let timerId = null;
+let results = [];
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const setup =
+  document.getElementById("setup");
+
+const exam =
+  document.getElementById("exam");
+
+const result =
+  document.getElementById("result");
+
+const periodFilter =
+  document.getElementById("periodFilter");
+
+const countSelect =
+  document.getElementById("countSelect");
+
+const startBtn =
+  document.getElementById("startBtn");
+
+const progressText =
+  document.getElementById("progressText");
+
+const progressBar =
+  document.getElementById("progressBar");
+
+const timer =
+  document.getElementById("timer");
+
+const questionNumber =
+  document.getElementById("questionNumber");
+
+const questionCategory =
+  document.getElementById("questionCategory");
+
+const questionText =
+  document.getElementById("questionText");
+
+const sourceBox =
+  document.getElementById("sourceBox");
+
+const sourceText =
+  document.getElementById("sourceText");
+
+const options =
+  document.getElementById("options");
+
+const nextBtn =
+  document.getElementById("nextBtn");
+
+const explanation =
+  document.getElementById("explanation");
+
+const explanationText =
+  document.getElementById("explanationText");
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+[
+  ...new Set(
+    mockData.map(q => q.period)
+  )
+].forEach(period => {
+
+  const option =
+    document.createElement("option");
+
+  option.value = period;
+  option.textContent = period;
+
+  periodFilter.appendChild(option);
+
+});
+
+
+/* =========================================================
+   SHUFFLE
+========================================================= */
+
+function shuffle(array){
+
+  const arr = [...array];
+
+  for(
+    let i = arr.length - 1;
+    i > 0;
+    i--
+  ){
+
+    const j =
+      Math.floor(
+        Math.random() * (i + 1)
+      );
+
+    [
+      arr[i],
+      arr[j]
+    ] = [
+      arr[j],
+      arr[i]
+    ];
+
+  }
+
+  return arr;
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+function startExam(){
+
+  const period =
+    periodFilter.value;
+
+  const count =
+    Number(countSelect.value);
+
+
+  let pool =
+    mockData.filter(q => {
+
+      if(
+        period &&
+        q.period !== period
+      ){
+        return false;
+      }
+
+      return true;
+
+    });
+
+
+  if(pool.length === 0){
+
+    alert("問題がありません。");
+
+    return;
+
+  }
+
+
+  questions =
+    shuffle(pool)
+      .slice(
+        0,
+        Math.min(
+          count,
+          pool.length
+        )
+      );
+
+
+  current = 0;
+  score = 0;
+  results = [];
+  answered = false;
+
+  timeLeft = questions.length * 120;
+
+  setup.style.display = "none";
+  result.classList.remove("show");
+  exam.classList.add("show");
+
+  startTimer();
+  renderQuestion();
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function startTimer(){
+
+  clearInterval(timerId);
+
+  updateTimer();
+
+
+  timerId =
+    setInterval(() => {
+
+      timeLeft--;
+
+      updateTimer();
+
+
+      if(timeLeft <= 0){
+
+        clearInterval(timerId);
+
+        finishExam();
+
+      }
+
+    },1000);
+
+}
+
+
+function updateTimer(){
+
+  const minutes =
+    Math.floor(
+      timeLeft / 60
+    );
+
+  const seconds =
+    timeLeft % 60;
+
+
+  timer.textContent =
+    `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
+
+
+  if(timeLeft <= 60){
+
+    timer.classList.add("warning");
+
+  }else{
+
+    timer.classList.remove("warning");
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER QUESTION
+========================================================= */
+
+function renderQuestion(){
+
+  const q =
+    questions[current];
+
+  answered = false;
+
+  progressText.textContent =
+    `${current + 1} / ${questions.length}`;
+
+  progressBar.style.width =
+    `${((current + 1) / questions.length) * 100}%`;
+
+
+  questionNumber.textContent =
+    `QUESTION ${String(current + 1).padStart(2,"0")}`;
+
+  questionCategory.textContent =
+    q.category;
+
+  questionText.textContent =
+    q.question;
+
+
+  if(q.source){
+
+    sourceBox.style.display = "block";
+    sourceText.textContent = q.source;
+
+  }else{
+
+    sourceBox.style.display = "none";
+
+  }
+
+
+  options.innerHTML = "";
+
+
+  q.options.forEach(
+    (optionText,index) => {
+
+      const button =
+        document.createElement("button");
+
+      button.className = "option";
+
+
+      button.innerHTML = `
+        <span class="option-letter">
+          ${String.fromCharCode(65 + index)}
+        </span>
+        ${escapeHTML(optionText)}
+      `;
+
+
+      button.addEventListener(
+        "click",
+        () => selectOption(index)
+      );
+
+
+      options.appendChild(button);
+
+    }
+  );
+
+
+  explanation.classList.remove("show");
+  explanationText.textContent = "";
+
+  nextBtn.disabled = true;
+  nextBtn.textContent =
+    current === questions.length - 1
+      ? "結果を見る"
+      : "次の問題";
+
+}
+
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+function selectOption(index){
+
+  if(answered){
+    return;
+  }
+
+
+  answered = true;
+
+
+  const q =
+    questions[current];
+
+  const buttons =
+    [...document.querySelectorAll(".option")];
+
+
+  buttons.forEach(
+    (button,i) => {
+
+      button.disabled = true;
+
+      if(i === q.answer){
+
+        button.classList.add("correct");
+
+      }
+
+    }
+  );
+
+
+  if(index === q.answer){
+
+    score++;
+
+    results.push({
+      correct:true,
+      category:q.category
+    });
+
+  }else{
+
+    buttons[index]
+      .classList.add("wrong");
+
+    results.push({
+      correct:false,
+      category:q.category
+    });
+
+  }
+
+
+  explanationText.textContent =
+    q.explanation;
+
+  explanation.classList.add("show");
+
+  nextBtn.disabled = false;
+}
+
+
+/* =========================================================
+   NEXT
+========================================================= */
+
+function nextQuestion(){
+
+  if(!answered){
+    return;
+  }
+
+
+  current++;
+
+
+  if(current >= questions.length){
+
+    finishExam();
+
+    return;
+
+  }
+
+
+  renderQuestion();
+
+}
+
+
+/* =========================================================
+   FINISH
+========================================================= */
+
+function finishExam(){
+
+  clearInterval(timerId);
+
+  exam.classList.remove("show");
+  result.classList.add("show");
+
+
+  const total =
+    questions.length;
+
+  const percent =
+    Math.round(
+      score / total * 100
+    );
+
+
+  document.getElementById(
+    "finalScore"
+  ).textContent =
+    `${percent}%`;
+
+
+  document.getElementById(
+    "correctCount"
+  ).textContent =
+    score;
+
+
+  document.getElementById(
+    "wrongCount"
+  ).textContent =
+    total - score;
+
+
+  document.getElementById(
+    "totalCount"
+  ).textContent =
+    total;
+
+
+  renderSectionResults();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================================================
+   SECTION RESULTS
+========================================================= */
+
+function renderSectionResults(){
+
+  const container =
+    document.getElementById(
+      "sectionResults"
+    );
+
+  container.innerHTML = "";
+
+
+  const categories =
+    [...new Set(
+      questions.map(q => q.category)
+    )];
+
+
+  categories.forEach(category => {
+
+    const categoryQuestions =
+      questions.filter(
+        q => q.category === category
+      );
+
+
+    const categoryResults =
+      results.filter(
+        r => r.category === category
+      );
+
+
+    const correct =
+      categoryResults.filter(
+        r => r.correct
+      ).length;
+
+
+    const total =
+      categoryQuestions.length;
+
+
+    const percent =
+      Math.round(
+        correct / total * 100
+      );
+
+
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "section-row";
+
+
+    row.innerHTML = `
+
+      <div class="section-row-top">
+
+        <span>
+          ${escapeHTML(category)}
+        </span>
+
+        <span>
+          ${correct} / ${total}
+        </span>
+
+      </div>
+
+      <div class="section-bar">
+
+        <div
+          class="section-fill"
+          style="width:${percent}%"
+        ></div>
+
+      </div>
+
+    `;
+
+
+    container.appendChild(row);
+
+  });
+
+}
+
+
+/* =========================================================
+   RETRY
+========================================================= */
+
+function retry(){
+
+  result.classList.remove("show");
+  setup.style.display = "block";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+startBtn.addEventListener(
+  "click",
+  startExam
+);
+
+nextBtn.addEventListener(
+  "click",
+  nextQuestion
+);
+
+document
+  .getElementById("retryBtn")
+  .addEventListener(
+    "click",
+    retry
+  );
+
+</script>
+
+</body>
+</html>
