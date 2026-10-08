@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日本史 QUIZ</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --bg:#080b12;
+  --panel:#101621;
+  --panel2:#141c29;
+  --line:#263246;
+  --text:#e8eef7;
+  --sub:#91a0b7;
+  --cyan:#52e0e0;
+  --blue:#5ca8ff;
+  --purple:#a982ff;
+  --green:#62df9b;
+  --red:#ff6f7d;
+  --orange:#ffb45c;
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(82,224,224,.08),transparent 30%),
+    radial-gradient(circle at 85% 10%,rgba(169,130,255,.08),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:
+    -apple-system,BlinkMacSystemFont,
+    "Noto Sans JP","Yu Gothic",sans-serif;
+}
+
+button,
+select{
+  font:inherit;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter:blur(16px);
+  background:rgba(8,11,18,.88);
+  border-bottom:1px solid var(--line);
+}
+
+.header-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:18px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:.08em;
+  color:var(--cyan);
+}
+
+.logo span{
+  color:#fff;
+}
+
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.nav a{
+  color:var(--sub);
+  text-decoration:none;
+  padding:8px 11px;
+  border-radius:8px;
+  transition:.2s;
+}
+
+.nav a:hover{
+  color:#fff;
+  background:var(--panel2);
+}
+
+.nav a.active{
+  color:var(--cyan);
+  background:rgba(82,224,224,.1);
+}
+
+.hero{
+  max-width:1000px;
+  margin:auto;
+  padding:55px 24px 30px;
+  text-align:center;
+}
+
+.eyebrow{
+  color:var(--cyan);
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.16em;
+  margin-bottom:12px;
+}
+
+h1{
+  font-size:clamp(34px,6vw,58px);
+  line-height:1.1;
+  margin-bottom:16px;
+}
+
+.hero p{
+  color:var(--sub);
+  line-height:1.8;
+}
+
+
+/* =========================
+   CONTROL
+========================= */
+
+.controls{
+  max-width:900px;
+  margin:auto;
+  padding:0 24px 25px;
+}
+
+.control-box{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px;
+}
+
+.control-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+select{
+  width:100%;
+  padding:13px 14px;
+  color:#fff;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:9px;
+  outline:none;
+}
+
+select:focus{
+  border-color:var(--cyan);
+}
+
+.start-button{
+  width:100%;
+  margin-top:12px;
+  padding:14px;
+  border:0;
+  border-radius:10px;
+  background:linear-gradient(
+    135deg,
+    var(--cyan),
+    var(--blue)
+  );
+  color:#061018;
+  font-weight:900;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.start-button:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.08);
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+  max-width:900px;
+  margin:auto;
+  padding:0 24px 70px;
+}
+
+
+/* =========================
+   QUIZ HEADER
+========================= */
+
+.quiz-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:10px;
+}
+
+.progress-text{
+  color:var(--sub);
+  font-size:14px;
+}
+
+.score-text{
+  color:var(--cyan);
+  font-weight:900;
+}
+
+.progress-bar{
+  width:100%;
+  height:7px;
+  background:var(--panel2);
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(
+    90deg,
+    var(--cyan),
+    var(--blue)
+  );
+  transition:.3s;
+}
+
+
+/* =========================
+   QUESTION CARD
+========================= */
+
+.quiz-card{
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.025),
+      transparent
+    ),
+    var(--panel);
+
+  border:1px solid var(--line);
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.question-area{
+  padding:30px;
+}
+
+.question-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:18px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  padding:5px 9px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  color:var(--sub);
+  font-size:12px;
+}
+
+.badge.category{
+  color:var(--cyan);
+  border-color:rgba(82,224,224,.3);
+}
+
+.badge.period{
+  color:var(--blue);
+  border-color:rgba(92,168,255,.3);
+}
+
+.question{
+  font-size:clamp(22px,4vw,31px);
+  font-weight:900;
+  line-height:1.6;
+}
+
+.options{
+  display:grid;
+  gap:11px;
+  margin-top:28px;
+}
+
+.option{
+  width:100%;
+  padding:17px 18px;
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:#dfe7f2;
+  border-radius:11px;
+  text-align:left;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.option:hover:not(:disabled){
+  border-color:var(--cyan);
+  background:rgba(82,224,224,.06);
+  transform:translateX(2px);
+}
+
+.option:disabled{
+  cursor:default;
+}
+
+.option.correct{
+  border-color:var(--green);
+  background:rgba(98,223,155,.1);
+  color:#dffff0;
+}
+
+.option.wrong{
+  border-color:var(--red);
+  background:rgba(255,111,125,.1);
+  color:#ffe4e7;
+}
+
+.option-letter{
+  display:inline-flex;
+  width:28px;
+  height:28px;
+  justify-content:center;
+  align-items:center;
+  margin-right:9px;
+  border:1px solid #364359;
+  border-radius:7px;
+  color:var(--cyan);
+  font-size:13px;
+  font-weight:900;
+}
+
+.option.correct .option-letter{
+  color:var(--green);
+  border-color:var(--green);
+}
+
+.option.wrong .option-letter{
+  color:var(--red);
+  border-color:var(--red);
+}
+
+
+/* =========================
+   EXPLANATION
+========================= */
+
+.explanation{
+  display:none;
+  padding:22px 30px;
+  border-top:1px solid var(--line);
+  background:rgba(0,0,0,.14);
+}
+
+.explanation.show{
+  display:block;
+}
+
+.explanation-label{
+  color:var(--cyan);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.1em;
+  margin-bottom:8px;
+}
+
+.explanation-text{
+  color:#c7d1df;
+  line-height:1.9;
+}
+
+
+/* =========================
+   NEXT
+========================= */
+
+.next-area{
+  display:none;
+  padding:18px 30px 24px;
+}
+
+.next-area.show{
+  display:block;
+}
+
+.next-button{
+  width:100%;
+  padding:14px;
+  border:1px solid var(--cyan);
+  border-radius:10px;
+  background:rgba(82,224,224,.08);
+  color:var(--cyan);
+  font-weight:900;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.next-button:hover{
+  background:rgba(82,224,224,.15);
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+.result{
+  display:none;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:40px 30px;
+  text-align:center;
+}
+
+.result.show{
+  display:block;
+}
+
+.result-title{
+  color:var(--cyan);
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:.15em;
+  margin-bottom:12px;
+}
+
+.result-score{
+  font-size:64px;
+  font-weight:900;
+  line-height:1;
+  margin-bottom:15px;
+}
+
+.result-message{
+  color:var(--sub);
+  line-height:1.8;
+  margin-bottom:25px;
+}
+
+.result-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.result-stat{
+  padding:15px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--panel2);
+}
+
+.result-stat strong{
+  display:block;
+  font-size:22px;
+  color:#fff;
+  margin-bottom:4px;
+}
+
+.result-stat span{
+  font-size:11px;
+  color:var(--sub);
+}
+
+.retry-button{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:10px;
+  background:linear-gradient(
+    135deg,
+    var(--cyan),
+    var(--blue)
+  );
+  color:#061018;
+  font-weight:900;
+  cursor:pointer;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+  border-top:1px solid var(--line);
+  color:var(--sub);
+  text-align:center;
+  padding:30px 20px;
+  font-size:12px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+  .header-inner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .hero{
+    text-align:left;
+  }
+
+  .control-row{
+    grid-template-columns:1fr;
+  }
+
+}
+
+@media(max-width:550px){
+
+  .hero,
+  .controls,
+  .main{
+    padding-left:15px;
+    padding-right:15px;
+  }
+
+  .question-area{
+    padding:21px;
+  }
+
+  .question{
+    font-size:21px;
+  }
+
+  .explanation{
+    padding:20px;
+  }
+
+  .next-area{
+    padding:16px 20px 20px;
+  }
+
+  .result{
+    padding:30px 20px;
+  }
+
+  .result-stats{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<header class="header">
+
+  <div class="header-inner">
+
+    <div class="logo">
+      日本史 <span>QUIZ</span>
+    </div>
+
+    <nav class="nav">
+      <a href="timeline.html">年表</a>
+      <a href="people.html">人物</a>
+      <a href="connections.html">つながり</a>
+      <a href="quiz.html" class="active">一問一答</a>
+      <a href="causes.html">因果関係</a>
+      <a href="mock-exam.html">模試</a>
+    </nav>
+
+  </div>
+
+</header>
+
+
+<section class="hero">
+
+  <div class="eyebrow">
+    JAPANESE HISTORY / QUIZ
+  </div>
+
+  <h1>日本史 一問一答</h1>
+
+  <p>
+    日本史の重要事項を4択で確認。
+    時代や分野を選んで、知識の穴を見つけよう。
+  </p>
+
+</section>
+
+
+<section class="controls">
+
+  <div class="control-box">
+
+    <div class="control-row">
+
+      <select id="periodFilter">
+        <option value="">全時代</option>
+      </select>
+
+      <select id="categoryFilter">
+        <option value="">全分野</option>
+      </select>
+
+    </div>
+
+    <button
+      class="start-button"
+      id="startButton"
+    >
+      クイズをスタート
+    </button>
+
+  </div>
+
+</section>
+
+
+<main class="main">
+
+  <div id="quizArea">
+
+    <div class="quiz-head">
+
+      <div
+        class="progress-text"
+        id="progressText"
+      >
+        準備中
+      </div>
+
+      <div
+        class="score-text"
+        id="scoreText"
+      >
+        正解 0
+      </div>
+
+    </div>
+
+    <div class="progress-bar">
+      <div
+        class="progress-fill"
+        id="progressFill"
+      ></div>
+    </div>
+
+
+    <div
+      class="quiz-card"
+      id="quizCard"
+      style="display:none;"
+    >
+
+      <div class="question-area">
+
+        <div
+          class="question-meta"
+          id="questionMeta"
+        ></div>
+
+        <div
+          class="question"
+          id="question"
+        ></div>
+
+        <div
+          class="options"
+          id="options"
+        ></div>
+
+      </div>
+
+
+      <div
+        class="explanation"
+        id="explanation"
+      >
+
+        <div class="explanation-label">
+          EXPLANATION
+        </div>
+
+        <div
+          class="explanation-text"
+          id="explanationText"
+        ></div>
+
+      </div>
+
+
+      <div
+        class="next-area"
+        id="nextArea"
+      >
+
+        <button
+          class="next-button"
+          id="nextButton"
+        >
+          次の問題 →
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="result"
+      id="result"
+    >
+
+      <div class="result-title">
+        QUIZ COMPLETE
+      </div>
+
+      <div
+        class="result-score"
+        id="resultScore"
+      >
+        0%
+      </div>
+
+      <div
+        class="result-message"
+        id="resultMessage"
+      ></div>
+
+
+      <div class="result-stats">
+
+        <div class="result-stat">
+          <strong id="correctResult">0</strong>
+          <span>正解</span>
+        </div>
+
+        <div class="result-stat">
+          <strong id="wrongResult">0</strong>
+          <span>不正解</span>
+        </div>
+
+        <div class="result-stat">
+          <strong id="totalResult">0</strong>
+          <span>問題数</span>
+        </div>
+
+      </div>
+
+
+      <button
+        class="retry-button"
+        id="retryButton"
+      >
+        もう一度挑戦
+      </button>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<footer class="footer">
+  日本史 QUIZ ｜ 知識を確認して弱点を発見する
+</footer>
+
+
+<script>
+
+/* =========================================================
+   QUIZ DATA
+   後からここへ問題を追加していけばOK
+========================================================= */
+
+const quizData = [
+
+  {
+    id:1,
+    period:"古代",
+    category:"原始・古代",
+    question:"日本列島で、稲作が本格的に広まった時代はどれ？",
+    choices:[
+      "旧石器時代",
+      "縄文時代",
+      "弥生時代",
+      "古墳時代"
+    ],
+    answer:2,
+    explanation:"稲作は弥生時代に本格的に広まりました。"
+  },
+
+  {
+    id:2,
+    period:"古代",
+    category:"原始・古代",
+    question:"57年に後漢から「漢委奴国王」の金印を授かったとされる国はどれ？",
+    choices:[
+      "邪馬台国",
+      "奴国",
+      "狗奴国",
+      "倭国"
+    ],
+    answer:1,
+    explanation:"57年、倭の奴国王が後漢に使者を送り、光武帝から金印を授かったとされています。"
+  },
+
+  {
+    id:3,
+    period:"古代",
+    category:"原始・古代",
+    question:"239年に魏へ使者を送ったとされる人物は誰？",
+    choices:[
+      "卑弥呼",
+      "推古天皇",
+      "持統天皇",
+      "紫式部"
+    ],
+    answer:0,
+    explanation:"邪馬台国の女王卑弥呼は239年、魏に使者を送りました。"
+  },
+
+  {
+    id:4,
+    period:"飛鳥",
+    category:"政治・制度",
+    question:"645年に起こった乙巳の変で滅ぼされた豪族はどれ？",
+    choices:[
+      "藤原氏",
+      "平氏",
+      "蘇我氏",
+      "橘氏"
+    ],
+    answer:2,
+    explanation:"中大兄皇子と中臣鎌足は蘇我入鹿を暗殺し、蘇我本宗家を滅ぼしました。"
+  },
+
+  {
+    id:5,
+    period:"飛鳥",
+    category:"政治・制度",
+    question:"701年に完成した律令はどれ？",
+    choices:[
+      "御成敗式目",
+      "大宝律令",
+      "養老律令",
+      "武家諸法度"
+    ],
+    answer:1,
+    explanation:"701年に大宝律令が完成し、律令国家の制度が整えられました。"
+  },
+
+  {
+    id:6,
+    period:"奈良",
+    category:"政治・制度",
+    question:"710年に都が置かれた場所はどこ？",
+    choices:[
+      "平安京",
+      "長岡京",
+      "平城京",
+      "藤原京"
+    ],
+    answer:2,
+    explanation:"710年、都は藤原京から平城京へ移されました。"
+  },
+
+  {
+    id:7,
+    period:"奈良",
+    category:"文化",
+    question:"752年に開眼供養が行われた東大寺の大仏は、誰の時代に造立が進められた？",
+    choices:[
+      "聖武天皇",
+      "桓武天皇",
+      "天武天皇",
+      "嵯峨天皇"
+    ],
+    answer:0,
+    explanation:"聖武天皇は仏教によって国家の安定を図ろうとし、東大寺の大仏造立を進めました。"
+  },
+
+  {
+    id:8,
+    period:"平安",
+    category:"政治・制度",
+    question:"794年に都が移された場所はどこ？",
+    choices:[
+      "鎌倉",
+      "平安京",
+      "長岡京",
+      "大宰府"
+    ],
+    answer:1,
+    explanation:"桓武天皇は794年に平安京へ都を移しました。"
+  },
+
+  {
+    id:9,
+    period:"平安",
+    category:"文化",
+    question:"894年に停止されたものはどれ？",
+    choices:[
+      "遣隋使",
+      "遣唐使",
+      "勘合貿易",
+      "日宋貿易"
+    ],
+    answer:1,
+    explanation:"菅原道真の提案などを背景に、894年に遣唐使が停止されました。"
+  },
+
+  {
+    id:10,
+    period:"平安",
+    category:"政治・制度",
+    question:"1086年に始まった政治形態はどれ？",
+    choices:[
+      "摂関政治",
+      "院政",
+      "執権政治",
+      "幕藩体制"
+    ],
+    answer:1,
+    explanation:"白河上皇が1086年に院政を開始しました。"
+  },
+
+  {
+    id:11,
+    period:"鎌倉",
+    category:"政治・制度",
+    question:"1232年に北条泰時が制定した武家法はどれ？",
+    choices:[
+      "大宝律令",
+      "御成敗式目",
+      "武家諸法度",
+      "五箇条の御誓文"
+    ],
+    answer:1,
+    explanation:"1232年、北条泰時が御成敗式目を制定しました。"
+  },
+
+  {
+    id:12,
+    period:"鎌倉",
+    category:"外交",
+    question:"1274年の元軍による襲来を何という？",
+    choices:[
+      "弘安の役",
+      "文永の役",
+      "文禄の役",
+      "慶長の役"
+    ],
+    answer:1,
+    explanation:"1274年は文永の役、1281年は弘安の役です。"
+  },
+
+  {
+    id:13,
+    period:"室町",
+    category:"政治・制度",
+    question:"1336年に建武式目を制定した人物は誰？",
+    choices:[
+      "足利尊氏",
+      "足利義満",
+      "足利義政",
+      "新田義貞"
+    ],
+    answer:0,
+    explanation:"足利尊氏は1336年に建武式目を制定し、室町幕府の政治的基盤を整えました。"
+  },
+
+  {
+    id:14,
+    period:"室町",
+    category:"外交",
+    question:"日明貿易で正式な貿易船であることを証明するために使用されたものは？",
+    choices:[
+      "朱印状",
+      "勘合",
+      "御朱印",
+      "判物"
+    ],
+    answer:1,
+    explanation:"日明貿易では倭寇との区別のため、勘合を用いました。"
+  },
+
+  {
+    id:15,
+    period:"室町",
+    category:"政治・制度",
+    question:"1467年に始まった大規模な内乱はどれ？",
+    choices:[
+      "承久の乱",
+      "応仁の乱",
+      "保元の乱",
+      "島原の乱"
+    ],
+    answer:1,
+    explanation:"1467年に応仁の乱が始まり、室町幕府の統制力低下が進みました。"
+  },
+
+  {
+    id:16,
+    period:"戦国",
+    category:"外交",
+    question:"1543年に日本へ伝来したとされるものは？",
+    choices:[
+      "キリスト教",
+      "活版印刷",
+      "鉄砲",
+      "蒸気機関"
+    ],
+    answer:2,
+    explanation:"1543年、種子島に鉄砲が伝来したとされています。"
+  },
+
+  {
+    id:17,
+    period:"戦国",
+    category:"文化",
+    question:"1549年に来日し、キリスト教を日本に伝えた人物は誰？",
+    choices:[
+      "フランシスコ・ザビエル",
+      "ルイス・フロイス",
+      "ヴァリニャーノ",
+      "マテオ・リッチ"
+    ],
+    answer:0,
+    explanation:"1549年、イエズス会宣教師フランシスコ・ザビエルが来日しました。"
+  },
+
+  {
+    id:18,
+    period:"安土桃山",
+    category:"政治・制度",
+    question:"1582年、本能寺の変で織田信長を討った人物は誰？",
+    choices:[
+      "豊臣秀吉",
+      "徳川家康",
+      "明智光秀",
+      "柴田勝家"
+    ],
+    answer:2,
+    explanation:"1582年、明智光秀が本能寺で織田信長を襲撃しました。"
+  },
+
+  {
+    id:19,
+    period:"安土桃山",
+    category:"政治・制度",
+    question:"1590年に全国統一をほぼ完成させた人物は誰？",
+    choices:[
+      "織田信長",
+      "豊臣秀吉",
+      "徳川家康",
+      "石田三成"
+    ],
+    answer:1,
+    explanation:"1590年、豊臣秀吉が小田原の北条氏を降伏させ、全国統一をほぼ完成させました。"
+  },
+
+  {
+    id:20,
+    period:"江戸",
+    category:"政治・制度",
+    question:"1600年に起こった戦いはどれ？",
+    choices:[
+      "長篠の戦い",
+      "関ヶ原の戦い",
+      "桶狭間の戦い",
+      "川中島の戦い"
+    ],
+    answer:1,
+    explanation:"1600年、関ヶ原の戦いで徳川家康率いる東軍が勝利しました。"
+  },
+
+  {
+    id:21,
+    period:"江戸",
+    category:"政治・制度",
+    question:"1603年に征夷大将軍となり、江戸幕府を開いた人物は誰？",
+    choices:[
+      "徳川家康",
+      "徳川秀忠",
+      "徳川家光",
+      "徳川吉宗"
+    ],
+    answer:0,
+    explanation:"徳川家康は1603年に征夷大将軍となり、江戸幕府を開きました。"
+  },
+
+  {
+    id:22,
+    period:"江戸",
+    category:"社会",
+    question:"1637〜1638年に起こった一揆はどれ？",
+    choices:[
+      "島原・天草一揆",
+      "大塩平八郎の乱",
+      "生類憐みの令",
+      "百姓一揆"
+    ],
+    answer:0,
+    explanation:"1637〜1638年、島原・天草一揆が起こりました。"
+  },
+
+  {
+    id:23,
+    period:"江戸",
+    category:"政治・制度",
+    question:"享保の改革を行った将軍は誰？",
+    choices:[
+      "徳川家光",
+      "徳川綱吉",
+      "徳川吉宗",
+      "徳川慶喜"
+    ],
+    answer:2,
+    explanation:"徳川吉宗が享保の改革を行いました。"
+  },
+
+  {
+    id:24,
+    period:"江戸",
+    category:"政治・制度",
+    question:"寛政の改革を主導した人物は誰？",
+    choices:[
+      "田沼意次",
+      "松平定信",
+      "水野忠邦",
+      "井伊直弼"
+    ],
+    answer:1,
+    explanation:"松平定信が寛政の改革を主導しました。"
+  },
+
+  {
+    id:25,
+    period:"江戸",
+    category:"政治・制度",
+    question:"天保の改革を主導した人物は誰？",
+    choices:[
+      "水野忠邦",
+      "松平定信",
+      "田沼意次",
+      "阿部正弘"
+    ],
+    answer:0,
+    explanation:"水野忠邦が天保の改革を主導しました。"
+  },
+
+  {
+    id:26,
+    period:"江戸",
+    category:"外交",
+    question:"1853年に浦賀へ来航したアメリカの使節は誰？",
+    choices:[
+      "ハリス",
+      "ペリー",
+      "プチャーチン",
+      "レザノフ"
+    ],
+    answer:1,
+    explanation:"1853年、アメリカ東インド艦隊司令長官ペリーが浦賀へ来航しました。"
+  },
+
+  {
+    id:27,
+    period:"幕末",
+    category:"外交",
+    question:"1854年に日本とアメリカの間で結ばれた条約はどれ？",
+    choices:[
+      "日米修好通商条約",
+      "日米和親条約",
+      "日米安全保障条約",
+      "下関条約"
+    ],
+    answer:1,
+    explanation:"1854年に日米和親条約が結ばれ、下田と箱館が開港されました。"
+  },
+
+  {
+    id:28,
+    period:"幕末",
+    category:"政治・制度",
+    question:"1867年、徳川慶喜が政権を朝廷へ返したことを何という？",
+    choices:[
+      "版籍奉還",
+      "大政奉還",
+      "廃藩置県",
+      "王政復古"
+    ],
+    answer:1,
+    explanation:"1867年、徳川慶喜が大政奉還を行いました。"
+  },
+
+  {
+    id:29,
+    period:"明治",
+    category:"政治・制度",
+    question:"1871年に行われた改革はどれ？",
+    choices:[
+      "廃藩置県",
+      "地租改正",
+      "徴兵令",
+      "学制"
+    ],
+    answer:0,
+    explanation:"1871年、廃藩置県が行われ、中央集権化が進みました。"
+  },
+
+  {
+    id:30,
+    period:"明治",
+    category:"政治・制度",
+    question:"1873年に出された軍事制度に関する法令はどれ？",
+    choices:[
+      "徴兵令",
+      "学制",
+      "五箇条の御誓文",
+      "新聞紙条例"
+    ],
+    answer:0,
+    explanation:"1873年、徴兵令が出され、近代的な軍制の整備が進められました。"
+  },
+
+  {
+    id:31,
+    period:"明治",
+    category:"政治・制度",
+    question:"1889年に公布された憲法はどれ？",
+    choices:[
+      "日本国憲法",
+      "五箇条の御誓文",
+      "大日本帝国憲法",
+      "十七条憲法"
+    ],
+    answer:2,
+    explanation:"1889年、大日本帝国憲法が公布され、1890年に施行されました。"
+  },
+
+  {
+    id:32,
+    period:"明治",
+    category:"外交",
+    question:"1894〜1895年に日本と清の間で行われた戦争はどれ？",
+    choices:[
+      "日露戦争",
+      "日清戦争",
+      "第一次世界大戦",
+      "日中戦争"
+    ],
+    answer:1,
+    explanation:"1894〜1895年に日清戦争が行われ、日本は清に勝利しました。"
+  },
+
+  {
+    id:33,
+    period:"明治",
+    category:"外交",
+    question:"1904〜1905年に日本とロシアの間で行われた戦争はどれ？",
+    choices:[
+      "日清戦争",
+      "日露戦争",
+      "戊辰戦争",
+      "日中戦争"
+    ],
+    answer:1,
+    explanation:"1904〜1905年に日露戦争が行われました。"
+  },
+
+  {
+    id:34,
+    period:"明治",
+    category:"政治・制度",
+    question:"1910年に行われた出来事はどれ？",
+    choices:[
+      "韓国併合",
+      "満州事変",
+      "日韓基本条約",
+      "サンフランシスコ平和条約"
+    ],
+    answer:0,
+    explanation:"1910年、日本は韓国併合を行いました。"
+  },
+
+  {
+    id:35,
+    period:"大正",
+    category:"社会",
+    question:"1918年に全国へ広がった社会運動はどれ？",
+    choices:[
+      "米騒動",
+      "血盟団事件",
+      "五・一五事件",
+      "二・二六事件"
+    ],
+    answer:0,
+    explanation:"1918年、米価高騰を背景に米騒動が全国へ広がりました。"
+  },
+
+  {
+    id:36,
+    period:"大正",
+    category:"政治・制度",
+    question:"1925年に成立した、25歳以上の男子に選挙権を認めた法律はどれ？",
+    choices:[
+      "治安維持法",
+      "普通選挙法",
+      "国家総動員法",
+      "政治資金規正法"
+    ],
+    answer:1,
+    explanation:"1925年、普通選挙法が成立し、25歳以上の男子に選挙権が認められました。"
+  },
+
+  {
+    id:37,
+    period:"大正",
+    category:"政治・制度",
+    question:"1925年に普通選挙法と同じ年に成立した法律はどれ？",
+    choices:[
+      "治安維持法",
+      "徴兵令",
+      "国家総動員法",
+      "農地改革"
+    ],
+    answer:0,
+    explanation:"1925年には普通選挙法とともに治安維持法が成立しました。"
+  },
+
+  {
+    id:38,
+    period:"昭和",
+    category:"政治・制度",
+    question:"1931年に起こった出来事はどれ？",
+    choices:[
+      "二・二六事件",
+      "満州事変",
+      "五・一五事件",
+      "日中戦争"
+    ],
+    answer:1,
+    explanation:"1931年、関東軍が満州事変を起こしました。"
+  },
+
+  {
+    id:39,
+    period:"昭和",
+    category:"政治・制度",
+    question:"1932年に起こった事件はどれ？",
+    choices:[
+      "五・一五事件",
+      "二・二六事件",
+      "満州事変",
+      "血盟団事件"
+    ],
+    answer:0,
+    explanation:"1932年、犬養毅首相が海軍青年将校らに殺害された五・一五事件が起こりました。"
+  },
+
+  {
+    id:40,
+    period:"昭和",
+    category:"政治・制度",
+    question:"1936年に起こった事件はどれ？",
+    choices:[
+      "五・一五事件",
+      "二・二六事件",
+      "満州事変",
+      "柳条湖事件"
+    ],
+    answer:1,
+    explanation:"1936年、陸軍青年将校らによる二・二六事件が起こりました。"
+  },
+
+  {
+    id:41,
+    period:"昭和",
+    category:"外交",
+    question:"1937年に始まった戦争はどれ？",
+    choices:[
+      "日露戦争",
+      "日中戦争",
+      "太平洋戦争",
+      "日清戦争"
+    ],
+    answer:1,
+    explanation:"1937年、盧溝橋事件をきっかけに日中戦争が全面化しました。"
+  },
+
+  {
+    id:42,
+    period:"昭和",
+    category:"外交",
+    question:"1941年に始まった戦争はどれ？",
+    choices:[
+      "日中戦争",
+      "太平洋戦争",
+      "日露戦争",
+      "第一次世界大戦"
+    ],
+    answer:1,
+    explanation:"1941年12月、日本はアメリカ・イギリスなどに宣戦し、太平洋戦争が始まりました。"
+  },
+
+  {
+    id:43,
+    period:"昭和",
+    category:"戦後",
+    question:"1945年に日本が受諾した宣言はどれ？",
+    choices:[
+      "カイロ宣言",
+      "ポツダム宣言",
+      "大西洋憲章",
+      "ワシントン宣言"
+    ],
+    answer:1,
+    explanation:"1945年8月、日本はポツダム宣言を受諾し、連合国に降伏しました。"
+  },
+
+  {
+    id:44,
+    period:"戦後",
+    category:"政治・制度",
+    question:"1947年に施行された憲法はどれ？",
+    choices:[
+      "大日本帝国憲法",
+      "日本国憲法",
+      "十七条憲法",
+      "五箇条の御誓文"
+    ],
+    answer:1,
+    explanation:"日本国憲法は1946年11月3日に公布され、1947年5月3日に施行されました。"
+  },
+
+  {
+    id:45,
+    period:"戦後",
+    category:"外交",
+    question:"1951年に調印された、日本の主権回復につながった条約はどれ？",
+    choices:[
+      "日米和親条約",
+      "サンフランシスコ平和条約",
+      "日米修好通商条約",
+      "ポーツマス条約"
+    ],
+    answer:1,
+    explanation:"1951年にサンフランシスコ平和条約が調印され、1952年に発効しました。"
+  },
+
+  {
+    id:46,
+    period:"戦後",
+    category:"外交",
+    question:"1956年、日本とソ連の国交回復につながったものはどれ？",
+    choices:[
+      "日ソ共同宣言",
+      "日韓基本条約",
+      "日中平和友好条約",
+      "日米安全保障条約"
+    ],
+    answer:0,
+    explanation:"1956年の日ソ共同宣言によって、日本とソ連の国交が回復しました。"
+  },
+
+  {
+    id:47,
+    period:"戦後",
+    category:"経済・社会",
+    question:"1950年代後半から1970年代初頭にかけて、日本経済が急速に成長した時期を何という？",
+    choices:[
+      "高度経済成長",
+      "バブル経済",
+      "昭和恐慌",
+      "安定成長"
+    ],
+    answer:0,
+    explanation:"1950年代後半から1970年代初頭にかけて、日本は高度経済成長を経験しました。"
+  },
+
+  {
+    id:48,
+    period:"戦後",
+    category:"経済・社会",
+    question:"1973年に起こり、高度経済成長の終わりに大きな影響を与えた出来事は？",
+    choices:[
+      "世界恐慌",
+      "第一次石油危機",
+      "リーマン・ショック",
+      "米騒動"
+    ],
+    answer:1,
+    explanation:"1973年の第一次石油危機は日本経済に大きな影響を与え、高度経済成長の終焉につながりました。"
+  },
+
+  {
+    id:49,
+    period:"戦後",
+    category:"経済・社会",
+    question:"1980年代後半に株価や地価が大幅に上昇した経済状況を何という？",
+    choices:[
+      "昭和恐慌",
+      "バブル経済",
+      "高度経済成長",
+      "特需景気"
+    ],
+    answer:1,
+    explanation:"1980年代後半、日本では株価や地価が急騰するバブル経済が形成されました。"
+  },
+
+  {
+    id:50,
+    period:"戦後",
+    category:"現代",
+    question:"2011年3月11日に発生した大規模な災害はどれ？",
+    choices:[
+      "阪神・淡路大震災",
+      "東日本大震災",
+      "関東大震災",
+      "新潟県中越地震"
+    ],
+    answer:1,
+    explanation:"2011年3月11日、東日本大震災が発生しました。"
+  }
+
+];
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+function initFilters(){
+
+  const periodFilter =
+    document.getElementById("periodFilter");
+
+  const categoryFilter =
+    document.getElementById("categoryFilter");
+
+  const periods =
+    [...new Set(
+      quizData.map(item => item.period)
+    )];
+
+  const categories =
+    [...new Set(
+      quizData.map(item => item.category)
+    )];
+
+
+  periods.forEach(period => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = period;
+    option.textContent = period;
+
+    periodFilter.appendChild(option);
+
+  });
+
+
+  categories.forEach(category => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = category;
+    option.textContent = category;
+
+    categoryFilter.appendChild(option);
+
+  });
+
+}
+
+
+/* =========================================================
+   SHUFFLE
+========================================================= */
+
+function shuffle(array){
+
+  const copy = [...array];
+
+  for(let i=copy.length-1;i>0;i--){
+
+    const j =
+      Math.floor(Math.random()*(i+1));
+
+    [copy[i],copy[j]] =
+      [copy[j],copy[i]];
+
+  }
+
+  return copy;
+
+}
+
+
+/* =========================================================
+   START
+========================================================= */
+
+function startQuiz(){
+
+  const period =
+    document.getElementById("periodFilter").value;
+
+  const category =
+    document.getElementById("categoryFilter").value;
+
+
+  let filtered =
+    quizData.filter(item => {
+
+      if(period && item.period !== period){
+        return false;
+      }
+
+      if(category && item.category !== category){
+        return false;
+      }
+
+      return true;
+
+    });
+
+
+  if(filtered.length === 0){
+    alert("条件に一致する問題がありません。");
+    return;
+  }
+
+
+  currentQuestions =
+    shuffle(filtered).slice(
+      0,
+      Math.min(10,filtered.length)
+    );
+
+
+  currentIndex = 0;
+  score = 0;
+  answered = false;
+
+
+  document.getElementById("scoreText")
+    .textContent = "正解 0";
+
+  document.getElementById("result")
+    .classList.remove("show");
+
+  document.getElementById("quizCard")
+    .style.display = "block";
+
+
+  renderQuestion();
+
+}
+
+
+/* =========================================================
+   RENDER QUESTION
+========================================================= */
+
+function renderQuestion(){
+
+  const item =
+    currentQuestions[currentIndex];
+
+  answered = false;
+
+
+  document.getElementById("progressText")
+    .textContent =
+      `問題 ${currentIndex + 1} / ${currentQuestions.length}`;
+
+
+  document.getElementById("progressFill")
+    .style.width =
+      `${(currentIndex / currentQuestions.length) * 100}%`;
+
+
+  document.getElementById("questionMeta")
+    .innerHTML = `
+
+      <span class="badge period">
+        ${item.period}
+      </span>
+
+      <span class="badge category">
+        ${item.category}
+      </span>
+
+    `;
+
+
+  document.getElementById("question")
+    .textContent = item.question;
+
+
+  const options =
+    document.getElementById("options");
+
+  options.innerHTML = "";
+
+
+  item.choices.forEach((choice,index) => {
+
+    const button =
+      document.createElement("button");
+
+    button.className = "option";
+
+    button.innerHTML = `
+
+      <span class="option-letter">
+        ${String.fromCharCode(65 + index)}
+      </span>
+
+      ${choice}
+
+    `;
+
+
+    button.addEventListener(
+      "click",
+      () => answerQuestion(index)
+    );
+
+
+    options.appendChild(button);
+
+  });
+
+
+  document.getElementById("explanation")
+    .classList.remove("show");
+
+  document.getElementById("nextArea")
+    .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   ANSWER
+========================================================= */
+
+function answerQuestion(selected){
+
+  if(answered){
+    return;
+  }
+
+  answered = true;
+
+
+  const item =
+    currentQuestions[currentIndex];
+
+  const buttons =
+    [...document.querySelectorAll(".option")];
+
+
+  buttons.forEach((button,index) => {
+
+    button.disabled = true;
+
+
+    if(index === item.answer){
+      button.classList.add("correct");
+    }
+
+
+    if(
+      index === selected &&
+      selected !== item.answer
+    ){
+      button.classList.add("wrong");
+    }
+
+  });
+
+
+  if(selected === item.answer){
+
+    score++;
+
+    document.getElementById("scoreText")
+      .textContent =
+        `正解 ${score}`;
+
+  }
+
+
+  document.getElementById("explanationText")
+    .textContent = item.explanation;
+
+
+  document.getElementById("explanation")
+    .classList.add("show");
+
+
+  document.getElementById("nextArea")
+    .classList.add("show");
+
+}
+
+
+/* =========================================================
+   NEXT
+========================================================= */
+
+function nextQuestion(){
+
+  currentIndex++;
+
+
+  if(currentIndex >= currentQuestions.length){
+
+    finishQuiz();
+
+    return;
+
+  }
+
+
+  renderQuestion();
+
+}
+
+
+/* =========================================================
+   RESULT
+========================================================= */
+
+function finishQuiz(){
+
+  const total =
+    currentQuestions.length;
+
+  const percentage =
+    Math.round((score / total) * 100);
+
+
+  document.getElementById("quizCard")
+    .style.display = "none";
+
+
+  document.getElementById("progressText")
+    .textContent = "終了";
+
+
+  document.getElementById("progressFill")
+    .style.width = "100%";
+
+
+  document.getElementById("resultScore")
+    .textContent =
+      `${percentage}%`;
+
+
+  document.getElementById("correctResult")
+    .textContent = score;
+
+
+  document.getElementById("wrongResult")
+    .textContent =
+      total - score;
+
+
+  document.getElementById("totalResult")
+    .textContent = total;
+
+
+  let message = "";
+
+
+  if(percentage === 100){
+
+    message =
+      "完璧！このレベルを維持しよう。";
+
+  }else if(percentage >= 80){
+
+    message =
+      "かなりいい感じ。細かい知識を固めればさらに強くなる。";
+
+  }else if(percentage >= 60){
+
+    message =
+      "基本は身についてきている。間違えた問題をもう一度確認しよう。";
+
+  }else{
+
+    message =
+      "ここから伸ばせる！間違えた問題を復習して再挑戦しよう。";
+
+  }
+
+
+  document.getElementById("resultMessage")
+    .textContent = message;
+
+
+  document.getElementById("result")
+    .classList.add("show");
+
+}
+
+
+/* =========================================================
+   RETRY
+========================================================= */
+
+function retryQuiz(){
+
+  document.getElementById("result")
+    .classList.remove("show");
+
+  startQuiz();
+
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document
+  .getElementById("startButton")
+  .addEventListener(
+    "click",
+    startQuiz
+  );
+
+
+document
+  .getElementById("nextButton")
+  .addEventListener(
+    "click",
+    nextQuestion
+  );
+
+
+document
+  .getElementById("retryButton")
+  .addEventListener(
+    "click",
+    retryQuiz
+  );
+
+
+/* =========================================================
+   START
+========================================================= */
+
+initFilters();
+
+</script>
+
+</body>
+</html>
